@@ -9,6 +9,8 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 
+import com.example.desk0018.R;
+
 public class AddTagDialog extends Dialog {
     private EditText etName, etUrl;  // 이름과 URL 입력 필드
     private Button btnConfirm;  // 확인 버튼

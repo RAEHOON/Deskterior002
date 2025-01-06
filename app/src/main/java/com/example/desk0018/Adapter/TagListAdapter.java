@@ -11,6 +11,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.desk0018.R;
+import com.example.desk0018.Tag.TagData;
+import com.example.desk0018.Tag.WebViewActivity;
+
 import java.util.List;
 
 public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.TagViewHolder> {
