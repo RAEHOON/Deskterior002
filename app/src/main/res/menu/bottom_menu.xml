@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/homehome"
+        android:title="홈" />
+    <item
+        android:id="@+id/nav_search"
+        android:icon="@drawable/gumsek"
+        android:title="검색" />
+    <item
+        android:id="@+id/nav_upload"
+        android:icon="@drawable/upload"
+        android:title="업로드" />
+    <item
+        android:id="@+id/nav_mypage"
+        android:icon="@drawable/mypagege"
+        android:title="마이페이지" />
+
+</menu>

@@ -1,0 +1,24 @@
+<resources>
+
+    <string name="nameisa">이미 계정이 있습니다</string>
+    <string name="namemamdmf">어플이름자리</string>
+    <string name="todo">TODO</string>
+    <string name="새로운사용자">새로운 사용자입니다</string>
+    <string name="menubutton1">메뉴 버튼</string>
+    <string name="serchgogo">검색어를 입력해봐</string>
+    <string name="home">홈</string>
+    <string name="lookaround">둘러보기</string>
+    <string name="mypage1">마이페이지</string>
+    <string name="nickname">닉네임</string>
+    <string name="login">로그인</string>
+    <string name="registmember">회원가입</string>
+    <string name="getmemberr">회원가입</string>
+    <string name="checkpass">비밀번호 확인</string>
+    <string name="checkpassss">비밀번호</string>
+    <string name="checknick">닉네임 중복확인</string>
+    <string name="nicknam">닉네임</string>
+    <string name="emailid">이메일 (아이디)</string>
+    <string name="goback">goback</string>
+    <string name="getmember">회원가입</string>
+    <string name="deskterior">DESKTERIOR</string>
+</resources>
