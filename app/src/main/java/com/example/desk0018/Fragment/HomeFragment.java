@@ -123,7 +123,7 @@ public class HomeFragment extends Fragment {
                         // 응답받은 데이터 확인용 로그 출력
                         Feed feed = feedList.get(i);
 
-                        Log.d("홈프레그먼트", "피드 내용: " + feed.getFeed());
+                        Log.d("홈프레그먼트", "피드 내용: " + feed.getCaption());
                         Log.d("홈프레그먼트", "닉네임: " + feed.getNickname());
                         Log.d("홈프레그먼트", "프로필 이미지: " + feed.getProfileImage());
                         Log.d("홈프레그먼트", "댓글 수: " + feed.getCommentCount());

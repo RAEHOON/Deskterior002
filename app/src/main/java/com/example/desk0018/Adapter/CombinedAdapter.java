@@ -1,6 +1,7 @@
 package com.example.desk0018.Adapter;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,9 +10,13 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -198,11 +203,116 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                         @Override
                         public void onEditPost() {
+                            // EditText 생성 및 초기화
+                            EditText input = new EditText(context);
+                            Log.d(TAG, "EditText 생성 완료");
 
+                            input.setText(feed.getCaption()); // 기존 캡션 설정
+                            Log.d(TAG, "EditText에 기존 캡션 설정: " + feed.getCaption());
+
+                            // 현재 피드의 고유 ID 가져오기
+                            int feedCount = feed.getFeedCount();
+                            Log.d(TAG, "현재 피드 feedCount 가져오기: " + feedCount);
+
+                            // 현재 스크롤 위치 가져오기 (스크롤 고정을 위해)
+                            int scrollPosition = ((LinearLayoutManager) recyclerView_homefragment.getLayoutManager()).findFirstVisibleItemPosition();
+                            Log.d(TAG, "현재 스크롤 위치: " + scrollPosition);
+
+                            // AlertDialog 생성 및 설정
+                            new AlertDialog.Builder(context)
+                                    .setTitle("게시글 수정")
+                                    .setMessage("새로운 내용을 입력하세요:")
+                                    .setView(input)
+                                    .setPositiveButton("수정완료", (dialog, which) -> {
+                                        // 수정 버튼 클릭 시 동작
+                                        String newCaption = input.getText().toString();
+                                        Log.d(TAG, "사용자가 입력한 새로운 캡션: " + newCaption);
+
+                                        if (!newCaption.isEmpty()) {
+                                            // Retrofit 객체 생성
+                                            ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
+                                            Log.d(TAG, "ApiService 객체 생성 완료");
+
+                                            // API 호출 준비
+                                            Call<ServerResponse> call = apiService.editFeed(feed.getFeedCount(), newCaption);
+                                            Log.d(TAG, "editFeed API 호출 준비 완료: feedCount=" + feed.getFeedCount() + ", newCaption=" + newCaption);
+
+                                            // API 호출 실행
+                                            call.enqueue(new Callback<ServerResponse>() {
+                                                @Override
+                                                public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
+                                                    Log.d(TAG, "API 응답 수신: " + response.toString());
+                                                    if (response.isSuccessful() && response.body() != null) {
+                                                        Log.d(TAG, "API 응답 성공: " + response.body().toString());
+                                                        if (response.body().isSuccess()) {
+                                                            // 로컬 데이터 업데이트
+                                                            feed.setCaption(newCaption);
+                                                            Log.d(TAG, "로컬 피드 캡션 업데이트 완료: " + newCaption);
+
+                                                            // RecyclerView 갱신 (스크롤 위치 복원 포함)
+                                                            recyclerView_homefragment.post(() -> {
+                                                                notifyItemChanged(feedPosition + 1);
+                                                                recyclerView_homefragment.scrollToPosition(scrollPosition);
+                                                                Log.d(TAG, "RecyclerView 갱신 및 스크롤 위치 유지 완료: " + scrollPosition);
+                                                            });
+
+                                                            Toast.makeText(context, "게시글이 수정되었습니다.", Toast.LENGTH_SHORT).show();
+                                                        } else {
+                                                            Log.e(TAG, "게시글 수정 실패: " + response.body().getMessage());
+                                                            Toast.makeText(context, "게시글 수정 실패: " + response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    } else {
+                                                        Log.e(TAG, "response.isSuccessful() 실패 또는 response.body()가 null");
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onFailure(Call<ServerResponse> call, Throwable t) {
+                                                    Log.e(TAG, "네트워크 오류 발생: " + t.getMessage(), t);
+                                                    Toast.makeText(context, "네트워크 오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                        } else {
+                                            Log.d(TAG, "사용자가 입력한 캡션이 비어있음");
+                                        }
+                                    })
+                                    .setNegativeButton("취소", (dialog, which) -> Log.d(TAG, "AlertDialog 취소 버튼 클릭"))
+                                    .show();
+                            Log.d(TAG, "AlertDialog 표시 완료");
                         }
+
 
                         @Override
                         public void onDeletePost() {
+                            int feedCount = feed.getFeedCount(); // 해당 피드의 feed_count
+
+                            // Retrofit API 호출
+                            ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
+                            Call<ServerResponse> call = apiService.deleteFeed(feedCount);
+
+                            call.enqueue(new Callback<ServerResponse>() {
+                                @Override
+                                public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
+                                    if (response.isSuccessful() && response.body() != null) {
+                                        if (response.body().isSuccess()) {
+                                            Toast.makeText(context, "게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show();
+
+                                            // RecyclerView 데이터 갱신
+                                            feedList.remove(feedPosition); // 해당 게시글을 리스트에서 제거
+                                            notifyItemRemoved(feedPosition + 1); // RecyclerView 갱신 (TOP 버튼 제외)
+                                        } else {
+                                            Toast.makeText(context, "게시글 삭제 실패: " + response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    } else {
+                                        Toast.makeText(context, "서버 응답 실패: " + response.code(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<ServerResponse> call, Throwable t) {
+                                    Toast.makeText(context, "네트워크 오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
 
                         }
                     });
@@ -218,124 +328,144 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     int scrollPosition = ((LinearLayoutManager) recyclerView_homefragment.getLayoutManager()).findFirstVisibleItemPosition();
                     Log.d(TAG, "현재 스크롤 위치: " + scrollPosition);
 
-                    AddTagDialog dialog = new AddTagDialog(context, (name, url) -> {
-                        Log.d(TAG, "AddTagDialog에서 URL 입력 완료: " + name + url);
+                    // 유형 선택을 위한 Spinner 설정
+                    String[] categories = {"키보드", "마우스, 패드", "모니터", "스피커", "조명", "케이스", "테이블", "선정리", "기타"};
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, categories);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
+                    Spinner spinner = new Spinner(context);
+                    spinner.setAdapter(adapter);
+                    Log.d(TAG, "Spinner 생성 및 유형 목록 추가 완료");
 
-                        String userId = sharedPreferences.getString("user_id", null); // 로그인 정보 가져오기
-                        Log.d(TAG, "SharedPreferences에서 user_id 가져오기: " + userId);
+                    // AlertDialog로 유형, 이름, URL 입력
+                    LinearLayout dialogLayout = new LinearLayout(context);
+                    dialogLayout.setOrientation(LinearLayout.VERTICAL);
 
-                        int feedCount = feed.getFeedCount(); // 현재 피드의 고유 ID
-                        Log.d(TAG, "현재 피드 feedCount 가져오기: " + feedCount);
+                    TextView categoryLabel = new TextView(context);
+                    categoryLabel.setText("유형 선택:");
+                    dialogLayout.addView(categoryLabel);
+                    dialogLayout.addView(spinner);
 
-                        // 현재 선택된 이미지 카운트 가져오기
-                        final int currentPage = feedViewHolder.viewPagerImages.getCurrentItem(); // ViewPager2의 현재 페이지
-                        final int imgCount;
-                        if (feed.getImageList() != null && currentPage < feed.getImageList().size()) {
-                            imgCount = feed.getImageList().get(currentPage).getImageCount(); // 현재 이미지의 imageCount 가져오기
-                            Log.d(TAG, "현재 이미지의 imageCount 가져오기: " + imgCount);
-                        } else {
-                            imgCount = -1; // 기본값
-                            Log.d(TAG, "ImageList가 비어있거나 유효하지 않습니다. 기본값 설정: " + imgCount);
-                        }
+                    EditText nameInput = new EditText(context);
+                    nameInput.setHint("태그 이름 입력");
+                    dialogLayout.addView(nameInput);
 
-                        // 태그 아이콘 생성
-                        ImageView tag = new ImageView(context);
-                        tag.setImageResource(R.drawable.plusssscircle);
-                        Log.d(TAG, "태그 ImageView 생성 및 리소스 설정");
+                    EditText urlInput = new EditText(context);
+                    urlInput.setHint("URL 입력");
+                    dialogLayout.addView(urlInput);
 
-                        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(40, 40);
-                        params.leftMargin = 100;
-                        params.topMargin = 100;
-                        tag.setLayoutParams(params);
-                        feedViewHolder.tagContainer.addView(tag);
-                        Log.d(TAG, "태그를 tagContainer에 추가");
+                    new AlertDialog.Builder(context)
+                            .setTitle("태그 추가")
+                            .setView(dialogLayout)
+                            .setPositiveButton("확인", (dialog, which) -> {
+                                String name = nameInput.getText().toString();
+                                String url = urlInput.getText().toString();
+                                String selectedCategory = spinner.getSelectedItem().toString();
 
+                                Log.d(TAG, "AddTagDialog 입력 완료: Name=" + name + ", URL=" + url + ", Category=" + selectedCategory);
 
-                        // 드래그 리스너 설정
-                        tag.setOnTouchListener(new TagDragListener());
-                        Log.d(TAG, "태그에 드래그 리스너 설정");
+                                String userId = sharedPreferences.getString("user_id", null); // 로그인 정보 가져오기
+                                Log.d(TAG, "SharedPreferences에서 user_id 가져오기: " + userId);
 
-                        // 완료 버튼 생성
-                        ImageView doneButton = new ImageView(context);
-                        doneButton.setImageResource(R.drawable.save);
-                        FrameLayout.LayoutParams doneParams = new FrameLayout.LayoutParams(200, 200);
-                        doneParams.gravity = Gravity.BOTTOM | Gravity.END;
-                        doneParams.bottomMargin = 20;
-                        doneParams.rightMargin = 20;
-                        feedViewHolder.tagContainer.addView(doneButton, doneParams);
-                        Log.d(TAG, "완료 버튼 생성 및 tagContainer에 추가");
+                                int feedCount = feed.getFeedCount(); // 현재 피드의 고유 ID
+                                Log.d(TAG, "현재 피드 feedCount 가져오기: " + feedCount);
 
-
-                        // 완료 버튼 클릭 이벤트
-                        doneButton.setOnClickListener(done -> {
-                            Log.d(TAG, "완료 버튼 클릭됨");
-
-                            doneButton.setVisibility(View.GONE); // 완료 버튼 숨기기
-                            tag.setVisibility(View.GONE); // 기존 태그 버튼 숨기기
-                            tag.setOnTouchListener(null); // 드래그 비활성화
-                            Log.d(TAG, "태그 드래그 리스너 비활성화");
-
-                            int tagX = (int) tag.getX(); // 태그 X좌표
-                            int tagY = (int) tag.getY(); // 태그 Y좌표
-                            Log.d(TAG, "태그 좌표 가져오기. X: " + tagX + ", Y: " + tagY);
-
-
-                            List<TagData> tagList = new ArrayList<>(); // TagData 객체를 저장할 리스트 생성
-                            tagList.add(new TagData(tagX, tagY, name, url)); // 태그 데이터를 배열 형식으로 리스트에 추가
-
-                            Gson gson = new Gson(); // Gson 라이브러리 객체 생성
-                            String tagsJson = gson.toJson(tagList); // 리스트를 JSON 문자열로 변환
-
-                            Log.d(TAG, "태그 JSON 데이터 생성: " + tagsJson);
-
-                            TagData newTag = new TagData(tagX, tagY,name, url);
-                            Log.d(TAG, "태그 데이터 생성: X=" + tagX + ", Y=" + tagY);
-
-                            // 클라이언트 캐시에 태그 추가
-                            feedViewHolder.addTagToClient(clientTagLists, newTag);
-
-
-                            // API 호출로 태그 정보 전송
-                            ApiService apiService = RetrofitClient.getApi();
-                            Call<ServerResponse> call = apiService.uploadTags(userId, feedCount, imgCount, tagsJson);
-                            Log.d(TAG, "API 호출 준비: userId=" + userId + ", feedCount=" + feedCount + ", imgCount=" + imgCount + ", tagsJson=" + tagsJson);
-
-                            call.enqueue(new Callback<ServerResponse>() {
-                                @Override
-                                public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
-                                    if (response.isSuccessful() && response.body() != null) {
-                                        Log.d(TAG, "API 응답 성공: " + response.body().getMessage());
-                                        Toast.makeText(context, "태그 저장 성공", Toast.LENGTH_SHORT).show();
-
-                                        updateTagsFromServer(feedCount, imgCount, feedViewHolder);
-                                        // 저장 성공 시 서버에서 최신 태그 데이터를 다시 불러와서 업데이트
-                                    } else {
-                                        Log.e(TAG, "API 응답 실패");
-                                        Toast.makeText(context, "태그 저장 실패", Toast.LENGTH_SHORT).show();
-                                    }
+                                // 현재 선택된 이미지 카운트 가져오기
+                                final int currentPage = feedViewHolder.viewPagerImages.getCurrentItem(); // ViewPager2의 현재 페이지
+                                final int imgCount;
+                                if (feed.getImageList() != null && currentPage < feed.getImageList().size()) {
+                                    imgCount = feed.getImageList().get(currentPage).getImageCount(); // 현재 이미지의 imageCount 가져오기
+                                    Log.d(TAG, "현재 이미지의 imageCount 가져오기: " + imgCount);
+                                } else {
+                                    imgCount = -1; // 기본값
+                                    Log.d(TAG, "ImageList가 비어있거나 유효하지 않습니다. 기본값 설정: " + imgCount);
                                 }
 
-                                @Override
-                                public void onFailure(Call<ServerResponse> call, Throwable t) {
-                                    Log.e(TAG, "API 호출 실패", t);
-                                    Toast.makeText(context, "서버 연결 실패", Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                                // 태그 아이콘 생성
+                                ImageView tag = new ImageView(context);
+                                tag.setImageResource(R.drawable.plusssscircle);
+                                Log.d(TAG, "태그 ImageView 생성 및 리소스 설정");
 
-                        });
+                                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(40, 40);
+                                params.leftMargin = 100;
+                                params.topMargin = 100;
+                                tag.setLayoutParams(params);
+                                feedViewHolder.tagContainer.addView(tag);
+                                Log.d(TAG, "태그를 tagContainer에 추가");
 
+                                // 드래그 리스너 설정
+                                tag.setOnTouchListener(new TagDragListener());
+                                Log.d(TAG, "태그에 드래그 리스너 설정");
 
-                        // 태그 클릭 이벤트 (웹뷰로 이동)
-                        tag.setOnClickListener(t -> {
-                            Log.d(TAG, "태그 클릭됨: URL 이동 - " + url);
-                            Intent intent = new Intent(context, WebViewActivity.class);
-                            intent.putExtra("url", url);
-                            context.startActivity(intent);
-                        });
-                    });
+                                // 완료 버튼 생성
+                                ImageView doneButton = new ImageView(context);
+                                doneButton.setImageResource(R.drawable.save);
+                                FrameLayout.LayoutParams doneParams = new FrameLayout.LayoutParams(200, 200);
+                                doneParams.gravity = Gravity.BOTTOM | Gravity.END;
+                                doneParams.bottomMargin = 20;
+                                doneParams.rightMargin = 20;
+                                feedViewHolder.tagContainer.addView(doneButton, doneParams);
+                                Log.d(TAG, "완료 버튼 생성 및 tagContainer에 추가");
 
-                    dialog.show();
+                                // 완료 버튼 클릭 이벤트
+                                doneButton.setOnClickListener(done -> {
+                                    Log.d(TAG, "완료 버튼 클릭됨");
+
+                                    doneButton.setVisibility(View.GONE); // 완료 버튼 숨기기
+                                    tag.setVisibility(View.GONE); // 기존 태그 버튼 숨기기
+                                    tag.setOnTouchListener(null); // 드래그 비활성화
+                                    Log.d(TAG, "태그 드래그 리스너 비활성화");
+
+                                    int tagX = (int) tag.getX(); // 태그 X좌표
+                                    int tagY = (int) tag.getY(); // 태그 Y좌표
+                                    Log.d(TAG, "태그 좌표 가져오기. X: " + tagX + ", Y: " + tagY);
+
+                                    List<TagData> tagList = new ArrayList<>(); // TagData 객체를 저장할 리스트 생성
+                                    tagList.add(new TagData(selectedCategory, tagX, tagY, name, url)); // 범주 포함 태그 데이터 추가
+
+                                    Gson gson = new Gson(); // Gson 라이브러리 객체 생성
+                                    String tagsJson = gson.toJson(tagList); // 리스트를 JSON 문자열로 변환
+
+                                    Log.d(TAG, "태그 JSON 데이터 생성: " + tagsJson);
+
+                                    // API 호출로 태그 정보 전송
+                                    ApiService apiService = RetrofitClient.getApi();
+                                    Call<ServerResponse> call = apiService.uploadTags(userId, feedCount, imgCount, tagsJson);
+                                    Log.d(TAG, "API 호출 준비: userId=" + userId + ", feedCount=" + feedCount + ", imgCount=" + imgCount + ", tagsJson=" + tagsJson);
+
+                                    call.enqueue(new Callback<ServerResponse>() {
+                                        @Override
+                                        public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
+                                            if (response.isSuccessful() && response.body() != null) {
+                                                Log.d(TAG, "API 응답 성공: " + response.body().getMessage());
+                                                Toast.makeText(context, "태그 저장 성공", Toast.LENGTH_SHORT).show();
+
+                                                updateTagsFromServer(feedCount, imgCount, feedViewHolder);
+                                                // 저장 성공 시 서버에서 최신 태그 데이터를 다시 불러와서 업데이트
+                                            } else {
+                                                Log.e(TAG, "API 응답 실패");
+                                                Toast.makeText(context, "태그 저장 실패", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ServerResponse> call, Throwable t) {
+                                            Log.e(TAG, "API 호출 실패", t);
+                                            Toast.makeText(context, "서버 연결 실패", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                });
+
+                                // 태그 클릭 이벤트 (웹뷰로 이동)
+                                tag.setOnClickListener(t -> {
+                                    Log.d(TAG, "태그 클릭됨: URL 이동 - " + url);
+                                    Intent intent = new Intent(context, WebViewActivity.class);
+                                    intent.putExtra("url", url);
+                                    context.startActivity(intent);
+                                });
+                            })
+                            .setNegativeButton("취소", null)
+                            .show();
                     Log.d(TAG, "AddTagDialog 표시됨");
                 });
 
@@ -457,8 +587,8 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             Log.d(TAG, "bind: 닉네임 설정 완료: " + feed.getNickname());
 
             // 피드 내용 설정
-            tvFeed.setText(feed.getFeed());
-            Log.d(TAG, "bind: 피드 내용 설정 완료: " + feed.getFeed());
+            tvFeed.setText(feed.getCaption());
+            Log.d(TAG, "bind: 피드 내용 설정 완료: " + feed.getCaption());
 
             // 좋아요 수 설정
             tvLikeCount.setText(String.valueOf(feed.getLikeCount()));
