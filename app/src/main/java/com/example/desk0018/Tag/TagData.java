@@ -1,35 +1,58 @@
 package com.example.desk0018.Tag;
 
 public class TagData {
-    private int x; // 태그 X 좌표
-    private int y; // 태그 Y 좌표
-    private String name;
+    private String category; // 유형
+    private int x; // X 좌표
+    private int y; // Y 좌표
+    private String name; // 태그 이름
     private String url; // 태그 URL
 
-    // 생성자
-    public TagData(int x, int y, String name, String url) {
+    public TagData(String category, int x, int y, String name, String url) {
+        this.category = category;
         this.x = x;
         this.y = y;
         this.name = name;
         this.url = url;
     }
 
-    // Getter 메서드
+    // Getter 및 Setter
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     public int getX() {
         return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
     }
 
     public int getY() {
         return y;
     }
 
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getUrl() {
         return url;
     }
-    public String getName(){ return name;}
 
-    @Override
-    public String toString() {
-        return "TagData{name='" + name + "', url='" + url + "'}";
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

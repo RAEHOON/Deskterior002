@@ -34,7 +34,8 @@ public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.TagViewH
     @Override
     public void onBindViewHolder(@NonNull TagViewHolder holder, int position) {
         TagData tag = tagList.get(position);
-        holder.tagName.setText(tag.getName());
+        holder.tagName.setText(tag.getName()); // 태그 이름 설정
+        holder.tagCategory.setText(tag.getCategory()); // 유형 설정
         holder.btnGoSite.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), WebViewActivity.class);
             intent.putExtra("url", tag.getUrl());
@@ -50,11 +51,13 @@ public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.TagViewH
     public static class TagViewHolder extends RecyclerView.ViewHolder {
         TextView tagName;
         Button btnGoSite;
+        TextView tagCategory; // 유형 표시
 
         public TagViewHolder(@NonNull View itemView) {
             super(itemView);
             tagName = itemView.findViewById(R.id.tag_name);
             btnGoSite = itemView.findViewById(R.id.btn_go_site);
+            tagCategory = itemView.findViewById(R.id.tag_category); // 유형 View 초기화
         }
     }
 }
