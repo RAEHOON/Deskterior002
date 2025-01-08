@@ -1,34 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="200dp"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="@drawable/dialog_background">
+    android:background="@drawable/dialog_background"
+    android:layout_gravity="center">
 
+    <!-- 제목 -->
+    <TextView
+        android:id="@+id/dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="게시글 옵션 선택"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:paddingBottom="16dp"
+        android:textColor="@android:color/black" />
 
+    <!-- 태그 보기 버튼 -->
     <Button
         android:id="@+id/btn_show_tags"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="태그 목록 보기"
-        android:padding="8dp" />
+        android:padding="12dp"
+        android:background="@drawable/button_background"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
 
-
+    <!-- 게시글 수정 버튼 -->
     <Button
         android:id="@+id/btn_edit_post"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="게시글 수정"
-        android:padding="8dp"
-        android:layout_marginTop="8dp" />
+        android:padding="12dp"
+        android:background="@drawable/button_background"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
 
-
+    <!-- 게시글 삭제 버튼 -->
     <Button
         android:id="@+id/btn_delete_post"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="게시글 삭제"
-        android:padding="8dp"
-        android:layout_marginTop="8dp" />
+        android:padding="12dp"
+        android:background="@drawable/button_background"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
+
 </LinearLayout>
