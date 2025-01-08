@@ -176,6 +176,45 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     feedViewHolder.addTagButton.setVisibility(View.GONE);
                     Log.d(TAG, "본인의 글이 아닙니다. 태그 추가 버튼 숨김");
                 }
+                feedViewHolder.btnLike.setOnClickListener(v -> {
+
+                    String userId = sharedPreferences.getString("user_id", null);
+
+                    if (userId == null) {
+                        Toast.makeText(context, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    int feedCount = feed.getFeedCount();
+                    boolean isLiked = feed.isLiked();
+
+                    feed.setLiked(!isLiked);
+                    feed.setLikeCount(feed.getLikeCount() + (isLiked ? -1 : 1));
+                    ApiService apiService = RetrofitClient.getApi();
+                    Call<ServerResponse> call = apiService.updateLikeStatus(userId, feedCount);
+                    call.enqueue(new Callback<ServerResponse>() {
+                        @Override
+                        public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
+                            if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                                notifyItemChanged(feedPosition + 1);
+                                Log.d(TAG, "좋아요 상태 업데이트 성공");
+                            } else {
+                                feed.setLiked(isLiked); // 원래 상태로 복구
+                                feed.setLikeCount(feed.getLikeCount() - (isLiked ? -1 : 1));
+                                notifyItemChanged(feedPosition + 1);
+                                Log.e(TAG, "좋아요 상태 업데이트 실패");
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ServerResponse> call, Throwable t) {
+                            feed.setLiked(isLiked); // 원래 상태로 복구
+                            feed.setLikeCount(feed.getLikeCount() - (isLiked ? -1 : 1));
+                            notifyItemChanged(feedPosition + 1);
+                            Log.e(TAG, "서버 연결 실패", t);
+                        }
+                    });
+                });
 
                 feedViewHolder.buttonMinimenu.setOnClickListener(v -> {
 
@@ -575,6 +614,7 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ViewPager2 viewPagerImages;
         CircleIndicator3 indicator;
         Button btnFollow;
+        ImageView btnLike;
         ImageView addTagButton;
         ImageView buttonMinimenu;
         FrameLayout tagContainer;
@@ -588,6 +628,8 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             imgProfile = itemView.findViewById(R.id.img_profile);
             //프로필이미지 레이아웃연결
             Log.d(TAG, "FeedViewHolder : imgProfile연결 ");
+            btnLike = itemView.findViewById(R.id.btn_like);
+
             tvNickname = itemView.findViewById(R.id.tv_nickname);
             //닉네임넥스트뷰 연결
             Log.d(TAG, "FeedViewHolder : tvNickname연결" + (tvNickname != null));
@@ -617,6 +659,8 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             Log.d(TAG, "FeedViewHolder: tag_container 연결");
             buttonMinimenu = itemView.findViewById(R.id.button_minimenu);
             tagViews = new ArrayList<>();
+
+
         }
 
         public void bind(Feed feed, List<List<TagData>> clientTagLists) {
@@ -631,9 +675,14 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             tvFeed.setText(feed.getCaption());
             Log.d(TAG, "bind: 피드 내용 설정 완료: " + feed.getCaption());
 
-            // 좋아요 수 설정
+            // 좋아요 수 설정 및 좋아요 상태 반영
+            if (feed.isLiked()) {
+                btnLike.setImageResource(R.drawable.heartfill); // 좋아요 이미지
+            } else {
+                btnLike.setImageResource(R.drawable.heart); // 기본 이미지
+            }
             tvLikeCount.setText(String.valueOf(feed.getLikeCount()));
-            Log.d(TAG, "bind: 좋아요 수 설정 완료: " + feed.getLikeCount());
+            Log.d(TAG, "bind: 좋아요 상태 및 좋아요 수 설정 완료"+ "좋아요상태 = " + feed.isLiked());
 
             // 댓글 수 설정
             tvCommentCount.setText(String.valueOf(feed.getCommentCount()));

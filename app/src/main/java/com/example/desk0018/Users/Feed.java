@@ -12,9 +12,10 @@ public class Feed {
     private int commentCount; // 댓글 수
     private String profileImage; // 프로필 이미지 URL
     private int feedCount; // 피드 고유 ID
+    private boolean isLiked; // 좋아요 상태 추가
 
     // 생성자
-    public Feed(String nickname, List<ImageData> imageList, String caption,  int likeCount, int commentCount, String profileImage, int feedCount) {
+    public Feed(String nickname, List<ImageData> imageList, String caption, int likeCount, int commentCount, String profileImage, int feedCount, boolean isLiked) {
         this.nickname = nickname;
         this.imageList = imageList;
         this.caption = caption;
@@ -22,6 +23,7 @@ public class Feed {
         this.commentCount = commentCount;
         this.profileImage = profileImage;
         this.feedCount = feedCount;
+        this.isLiked = isLiked; // 좋아요 상태 초기화
     }
 
     // Getter 메서드
@@ -35,10 +37,6 @@ public class Feed {
 
     public String getCaption() {
         return caption; // feed 대신 caption 반환
-    }
-    // Setter 메서드
-    public void setCaption(String caption) {
-        this.caption = caption; // feed 대신 caption 수정
     }
 
     public int getLikeCount() {
@@ -55,5 +53,22 @@ public class Feed {
 
     public int getFeedCount() {
         return feedCount;
+    }
+
+    public boolean isLiked() {
+        return isLiked; // 현재 좋아요 상태 반환
+    }
+
+    // Setter 메서드
+    public void setCaption(String caption) {
+        this.caption = caption; // feed 대신 caption 수정
+    }
+
+    public void setLikeCount(int likeCount) {
+        this.likeCount = likeCount; // 좋아요 수 수정
+    }
+
+    public void setLiked(boolean liked) {
+        isLiked = liked; // 좋아요 상태 수정
     }
 }

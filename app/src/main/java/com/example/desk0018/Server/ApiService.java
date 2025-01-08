@@ -65,7 +65,7 @@ public interface ApiService {
     );
 
     @GET("get_feeds.php")
-    Call<List<Feed>> getFeeds();
+    Call<List<Feed>> getFeeds(@Query("user_id") String userId);
     //피드 데이터를 가져오는 API 호출
     // 겟피드로
 
@@ -95,6 +95,13 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("edit_feed.php")
     Call<ServerResponse> editFeed(@Field("feed_count") int feedCount, @Field("caption") String newCaption);
+
+    @POST("update_like_status.php")
+    @FormUrlEncoded
+    Call<ServerResponse> updateLikeStatus(
+            @Field("user_id") String userId,
+            @Field("feed_count") int feedCount
+    );
 
 
 
