@@ -96,16 +96,9 @@ public interface ApiService {
     @POST("edit_feed.php")
     Call<ServerResponse> editFeed(@Field("feed_count") int feedCount, @Field("caption") String newCaption);
 
-    @FormUrlEncoded
-    @POST("edit_tag.php")
-    Call<ServerResponse> editTag(
-            @Field("action") String action, // add, edit, delete
-            @Field("tag_id") Integer tagId,
-            @Field("feed_count") int feedCount,
-            @Field("position_x") Double positionX,
-            @Field("position_y") Double positionY,
-            @Field("url") String url
-    );
+
+
+
 
 
 
