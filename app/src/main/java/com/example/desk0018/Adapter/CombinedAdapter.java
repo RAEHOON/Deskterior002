@@ -682,7 +682,7 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 btnLike.setImageResource(R.drawable.heart); // 기본 이미지
             }
             tvLikeCount.setText(String.valueOf(feed.getLikeCount()));
-            Log.d(TAG, "bind: 좋아요 상태 및 좋아요 수 설정 완료"+ "좋아요상태 = " + feed.isLiked());
+            Log.d(TAG, "bind: 좋아요 상태 및 좋아요 수 설정 완료"+ "좋아요상태 = " + feed.isLiked() + "좋아요 수 = " + feed.getLikeCount());
 
             // 댓글 수 설정
             tvCommentCount.setText(String.valueOf(feed.getCommentCount()));
