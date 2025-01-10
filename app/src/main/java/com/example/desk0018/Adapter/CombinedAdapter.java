@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.desk0018.R;
 import com.example.desk0018.Server.ApiService;
 import com.example.desk0018.Server.RetrofitClient;
@@ -695,6 +696,7 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             Glide.with(itemView.getContext())
                     .load(profileImageUrl)
                     .placeholder(R.drawable.ic_launcher_foreground)
+                    .apply(RequestOptions.circleCropTransform())
                     .into(imgProfile);
             Log.d(TAG, "bind: Glide로 프로필 이미지 로드 완료");
 

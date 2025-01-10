@@ -21,6 +21,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.desk0018.Fragment.HomeFragment;
@@ -161,6 +162,7 @@ public class Mainpage extends AppCompatActivity {
         Glide.with(this)
                 .asBitmap()
                 // 이미지를 Bitmap으로 로드
+                .apply(RequestOptions.circleCropTransform())
                 .load(profileImageUrl)
                 // 서버에서 받은 프로필 이미지 URL 로드
                 .placeholder(R.drawable.loding)
