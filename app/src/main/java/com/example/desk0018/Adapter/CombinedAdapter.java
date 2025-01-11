@@ -60,27 +60,19 @@ import retrofit2.Response;
 public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final String TAG = "CombinedAdapter";
-
     private static final int VIEW_TYPE_TOPBTN = 0;
     // 탑버튼 쪽 숫자 지정 (포지션)
     private static final int VIEW_TYPE_FEED = 1;
     // 피드 쪽 숫자 지정 (포지션)
     private final RecyclerView recyclerView_homefragment;
-
-
     private final Context context;
     // 컨텍스트 객체생성
-
     private List<Buttontop> btnList1;
     // 버튼탑으로 구성된 리스트 생성
-
     private List<Feed> feedList;
     // 피드로 구성된 리스트 생성
-
     private List<List<TagData>> allTagLists = new ArrayList<>();
     private List<List<TagData>> clientTagLists = new ArrayList<>();
-
-
     public CombinedAdapter(Context context, List<Buttontop> btnList1, List<Feed> feedList, RecyclerView recyclerView_homefragment) {
         Log.d(TAG, "CombinedAdapter 초기화, context, btnList1, feedList");
         this.context = context;
@@ -89,8 +81,6 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.recyclerView_homefragment = recyclerView_homefragment;
         //컨텍스트랑 리스트를 어뎁터에 넣고 객체 초기화. this 붙은게 외부것들
     }
-
-
     @Override
     public int getItemViewType(int position) {
         // 지금 쓰는 뷰타입이 어떤건지 포지션으로 확인
@@ -98,7 +88,6 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return position == 0 ? VIEW_TYPE_TOPBTN : VIEW_TYPE_FEED;
         // 포지션 0이면 탑버튼 뷰타입, 그게 아니면 피드 뷰타입
     }
-
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -121,12 +110,10 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             //위 뷰를 피드뷰홀더에 적용
         }
     }
-
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         // onBindViewHolder: RecyclerView의 각 아이템 뷰에 데이터를 연결
         Log.d(TAG, "onBindViewHolder 호출됨. position: " + position);
-
 
         if (holder.getItemViewType() == VIEW_TYPE_TOPBTN) {
             // ViewType이 TOP 버튼인 경우
@@ -155,21 +142,16 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             if (feedPosition >= 0 && feedPosition < feedList.size()) {
                 FeedViewHolder feedViewHolder = (FeedViewHolder) holder; // Feed 뷰홀더 생성
                 Log.d(TAG, "onBindViewHolder: FeedViewHolder 생성 완료");
-
-
                 Feed feed = feedList.get(feedPosition); // 피드 데이터 가져오기
                 Log.d(TAG, "onBindViewHolder: feed 데이터 가져오기 완료. feedPosition: " + feedPosition);
-
                 feedViewHolder.bind(feed, clientTagLists); // 피드 데이터를 뷰에 연결
                 Log.d(TAG, "onBindViewHolder: feedViewHolder에 데이터 바인딩 완료");
                 // 버튼 클릭 이벤트 추가
                 // 로그인된 사용자의 닉네임 가져오기
                 SharedPreferences sharedPreferences = context.getSharedPreferences("로그인정보", Context.MODE_PRIVATE);
                 String loggedInNickname = sharedPreferences.getString("nickname", null); // 로그인된 사용자 닉네임
-
                 Log.d(TAG, "로그인된 닉네임: " + loggedInNickname);
                 Log.d(TAG, "게시글 닉네임: " + feed.getNickname());
-
                 // 태그 추가 버튼 가시성 설정
                 if (feed.getNickname() != null && feed.getNickname().equals(loggedInNickname)) {
                     feedViewHolder.addTagButton.setVisibility(View.VISIBLE);
@@ -179,17 +161,13 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     Log.d(TAG, "본인의 글이 아닙니다. 태그 추가 버튼 숨김");
                 }
                 feedViewHolder.btnLike.setOnClickListener(v -> {
-
                     String userId = sharedPreferences.getString("user_id", null);
-
                     if (userId == null) {
                         Toast.makeText(context, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
                         return;
                     }
-
                     int feedCount = feed.getFeedCount();
                     boolean isLiked = feed.isLiked();
-
                     feed.setLiked(!isLiked);
                     feed.setLikeCount(feed.getLikeCount() + (isLiked ? -1 : 1));
                     ApiService apiService = RetrofitClient.getApi();
@@ -207,7 +185,6 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                 Log.e(TAG, "좋아요 상태 업데이트 실패");
                             }
                         }
-
                         @Override
                         public void onFailure(Call<ServerResponse> call, Throwable t) {
                             feed.setLiked(isLiked); // 원래 상태로 복구
@@ -217,11 +194,8 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         }
                     });
                 });
-
                 feedViewHolder.buttonMinimenu.setOnClickListener(v -> {
-
                     String postNickname = feed.getNickname();
-
                     MiniMenuDialog miniMenuDialog = new MiniMenuDialog(holder.itemView.getContext(),loggedInNickname, postNickname, new MiniMenuDialog.OnMiniMenuActionListener() {
                         @Override
                         public void onShowTags() {
@@ -231,7 +205,6 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                 // ViewPager2의 현재 페이지 위치에서 이미지 카운트 가져오기2
                                 int currentImagePosition = feedViewHolder.viewPagerImages.getCurrentItem();
                                 Log.d(TAG, "현재 ViewPager 이미지 position: " + currentImagePosition);
-
                                 if (currentImagePosition < feed.getImageList().size()) {
                                     imageCount = feed.getImageList().get(currentImagePosition).getImageCount();
                                 }
@@ -239,26 +212,20 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             // TagListDialog를 띄움
                             TagListDialog dialog = new TagListDialog(holder.itemView.getContext(), feedCount, imageCount);
                             dialog.show();
-
                         }
-
                         @Override
                         public void onEditPost() {
                             // EditText 생성 및 초기화
                             EditText input = new EditText(context);
                             Log.d(TAG, "EditText 생성 완료");
-
                             input.setText(feed.getCaption()); // 기존 캡션 설정
                             Log.d(TAG, "EditText에 기존 캡션 설정: " + feed.getCaption());
-
                             // 현재 피드의 고유 ID 가져오기
                             int feedCount = feed.getFeedCount();
                             Log.d(TAG, "현재 피드 feedCount 가져오기: " + feedCount);
-
                             // 현재 스크롤 위치 가져오기 (스크롤 고정을 위해)
                             int scrollPosition = ((LinearLayoutManager) recyclerView_homefragment.getLayoutManager()).findFirstVisibleItemPosition();
                             Log.d(TAG, "현재 스크롤 위치: " + scrollPosition);
-
                             // AlertDialog 생성 및 설정
                             new AlertDialog.Builder(context)
                                     .setTitle("게시글 수정")
@@ -268,16 +235,13 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                         // 수정 버튼 클릭 시 동작
                                         String newCaption = input.getText().toString();
                                         Log.d(TAG, "사용자가 입력한 새로운 캡션: " + newCaption);
-
                                         if (!newCaption.isEmpty()) {
                                             // Retrofit 객체 생성
                                             ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
                                             Log.d(TAG, "ApiService 객체 생성 완료");
-
                                             // API 호출 준비
                                             Call<ServerResponse> call = apiService.editFeed(feed.getFeedCount(), newCaption);
                                             Log.d(TAG, "editFeed API 호출 준비 완료: feedCount=" + feed.getFeedCount() + ", newCaption=" + newCaption);
-
                                             // API 호출 실행
                                             call.enqueue(new Callback<ServerResponse>() {
                                                 @Override
@@ -289,14 +253,12 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                                             // 로컬 데이터 업데이트
                                                             feed.setCaption(newCaption);
                                                             Log.d(TAG, "로컬 피드 캡션 업데이트 완료: " + newCaption);
-
                                                             // RecyclerView 갱신 (스크롤 위치 복원 포함)
                                                             recyclerView_homefragment.post(() -> {
                                                                 notifyItemChanged(feedPosition + 1);
                                                                 recyclerView_homefragment.scrollToPosition(scrollPosition);
                                                                 Log.d(TAG, "RecyclerView 갱신 및 스크롤 위치 유지 완료: " + scrollPosition);
                                                             });
-
                                                             Toast.makeText(context, "게시글이 수정되었습니다.", Toast.LENGTH_SHORT).show();
                                                         } else {
                                                             Log.e(TAG, "게시글 수정 실패: " + response.body().getMessage());
@@ -306,7 +268,6 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                                         Log.e(TAG, "response.isSuccessful() 실패 또는 response.body()가 null");
                                                     }
                                                 }
-
                                                 @Override
                                                 public void onFailure(Call<ServerResponse> call, Throwable t) {
                                                     Log.e(TAG, "네트워크 오류 발생: " + t.getMessage(), t);
@@ -321,23 +282,18 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                     .show();
                             Log.d(TAG, "AlertDialog 표시 완료");
                         }
-
-
                         @Override
                         public void onDeletePost() {
                             int feedCount = feed.getFeedCount(); // 해당 피드의 feed_count
-
                             // Retrofit API 호출
                             ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
                             Call<ServerResponse> call = apiService.deleteFeed(feedCount);
-
                             call.enqueue(new Callback<ServerResponse>() {
                                 @Override
                                 public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
                                     if (response.isSuccessful() && response.body() != null) {
                                         if (response.body().isSuccess()) {
                                             Toast.makeText(context, "게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show();
-
                                             // RecyclerView 데이터 갱신
                                             feedList.remove(feedPosition); // 해당 게시글을 리스트에서 제거
                                             notifyItemRemoved(feedPosition + 1); // RecyclerView 갱신 (TOP 버튼 제외)
@@ -348,27 +304,21 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                         Toast.makeText(context, "서버 응답 실패: " + response.code(), Toast.LENGTH_SHORT).show();
                                     }
                                 }
-
                                 @Override
                                 public void onFailure(Call<ServerResponse> call, Throwable t) {
                                     Toast.makeText(context, "네트워크 오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             });
-
                         }
                     });
                     // MiniMenuDialog 표시
                     miniMenuDialog.show();
-
                 });
-
                 feedViewHolder.addTagButton.setOnClickListener(v -> {
                     Log.d(TAG, "addTagButton 클릭됨");
-
                     TagOptionDialog dialog = new TagOptionDialog(context, feed, feedViewHolder, new TagOptionDialog.OnTagActionListener() {
                         @Override
                         public void onAddTag(Feed feed, FeedViewHolder feedViewHolder) {
-
 
                             Log.d(TAG, "showAddTagDialog 호출됨");
                             String[] categories = {"키보드", "마우스, 패드", "모니터", "스피커", "조명", "케이스", "테이블", "선정리", "기타"};
@@ -378,7 +328,6 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             Spinner spinner = new Spinner(context);
                             spinner.setAdapter(adapter);
                             Log.d(TAG, "Spinner 생성 및 유형 목록 추가 완료");
-
                             // AlertDialog로 유형, 이름, URL 입력
                             LinearLayout dialogLayout = new LinearLayout(context);
                             dialogLayout.setOrientation(LinearLayout.VERTICAL);
@@ -387,15 +336,12 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             categoryLabel.setText("유형 선택:");
                             dialogLayout.addView(categoryLabel);
                             dialogLayout.addView(spinner);
-
                             EditText nameInput = new EditText(context);
                             nameInput.setHint("태그 이름 입력");
                             dialogLayout.addView(nameInput);
-
                             EditText urlInput = new EditText(context);
                             urlInput.setHint("URL 입력");
                             dialogLayout.addView(urlInput);
-
                             new AlertDialog.Builder(context)
                                     .setTitle("태그 추가")
                                     .setView(dialogLayout)
@@ -422,23 +368,19 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                             imgCount = -1; // 기본값
                                             Log.d(TAG, "ImageList가 비어있거나 유효하지 않습니다. 기본값 설정: " + imgCount);
                                         }
-
                                         // 태그 아이콘 생성
                                         ImageView tag = new ImageView(context);
                                         tag.setImageResource(R.drawable.plusssscircle);
                                         Log.d(TAG, "태그 ImageView 생성 및 리소스 설정");
-
                                         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(40, 40);
                                         params.leftMargin = 100;
                                         params.topMargin = 100;
                                         tag.setLayoutParams(params);
                                         feedViewHolder.tagContainer.addView(tag);
                                         Log.d(TAG, "태그를 tagContainer에 추가");
-
                                         // 드래그 리스너 설정
                                         tag.setOnTouchListener(new TagDragListener());
                                         Log.d(TAG, "태그에 드래그 리스너 설정");
-
                                         // 완료 버튼 생성
                                         ImageView doneButton = new ImageView(context);
                                         doneButton.setImageResource(R.drawable.save);
@@ -448,28 +390,21 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                         doneParams.rightMargin = 20;
                                         feedViewHolder.tagContainer.addView(doneButton, doneParams);
                                         Log.d(TAG, "완료 버튼 생성 및 tagContainer에 추가");
-
                                         // 완료 버튼 클릭 이벤트
                                         doneButton.setOnClickListener(done -> {
                                             Log.d(TAG, "완료 버튼 클릭됨");
-
                                             doneButton.setVisibility(View.GONE); // 완료 버튼 숨기기
                                             tag.setVisibility(View.GONE); // 기존 태그 버튼 숨기기
                                             tag.setOnTouchListener(null); // 드래그 비활성화
                                             Log.d(TAG, "태그 드래그 리스너 비활성화");
-
                                             int tagX = (int) tag.getX(); // 태그 X좌표
                                             int tagY = (int) tag.getY(); // 태그 Y좌표
                                             Log.d(TAG, "태그 좌표 가져오기. X: " + tagX + ", Y: " + tagY);
-
                                             List<TagData> tagList = new ArrayList<>(); // TagData 객체를 저장할 리스트 생성
                                             tagList.add(new TagData(selectedCategory, tagX, tagY, name, url)); // 범주 포함 태그 데이터 추가
-
                                             Gson gson = new Gson(); // Gson 라이브러리 객체 생성
                                             String tagsJson = gson.toJson(tagList); // 리스트를 JSON 문자열로 변환
-
                                             Log.d(TAG, "태그 JSON 데이터 생성: " + tagsJson);
-
                                             // API 호출로 태그 정보 전송
                                             ApiService apiService = RetrofitClient.getApi();
                                             Call<ServerResponse> call = apiService.uploadTags(userId, feedCount, imgCount, tagsJson);
@@ -481,7 +416,6 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                                     if (response.isSuccessful() && response.body() != null) {
                                                         Log.d(TAG, "API 응답 성공: " + response.body().getMessage());
                                                         Toast.makeText(context, "태그 저장 성공", Toast.LENGTH_SHORT).show();
-
                                                         updateTagsFromServer(feedCount, imgCount, feedViewHolder);
                                                         // 저장 성공 시 서버에서 최신 태그 데이터를 다시 불러와서 업데이트
                                                     } else {
@@ -489,7 +423,6 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                                         Toast.makeText(context, "태그 저장 실패", Toast.LENGTH_SHORT).show();
                                                     }
                                                 }
-
                                                 @Override
                                                 public void onFailure(Call<ServerResponse> call, Throwable t) {
                                                     Log.e(TAG, "API 호출 실패", t);
@@ -497,7 +430,6 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                                 }
                                             });
                                         });
-
                                         // 태그 클릭 이벤트 (웹뷰로 이동)
                                         tag.setOnClickListener(t -> {
                                             Log.d(TAG, "태그 클릭됨: URL 이동 - " + url);
@@ -510,37 +442,28 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                     .show();
                             Log.d(TAG, "AddTagDialog 표시됨");
                         }
-
                         @Override
                         public void onEditTag(Feed feed) {
                             Log.d(TAG, "태그 수정 선택됨");
                             Toast.makeText(context, "태그 수정 기능은 아직 구현되지 않았습니다.", Toast.LENGTH_SHORT).show();
                         }
-
                         @Override
                         public void onDeleteTag(Feed feed) {
                             Log.d(TAG, "태그 삭제 선택됨");
                             Toast.makeText(context, "태그 삭제 기능은 아직 구현되지 않았습니다.", Toast.LENGTH_SHORT).show();
                         }
                     });
-
                     dialog.show();
                     Log.d(TAG, "TagOptionsDialog 표시됨");
                 });
-
-
-
-
             } else {
                 Log.e(TAG, "onBindViewHolder: 잘못된 feedPosition. position=" + position + ", feedPosition=" + feedPosition + ", feedList.size=" + feedList.size());
             }
         }
     }
-
     private void updateTagsFromServer(int feedCount, int imgCount, FeedViewHolder holder) {
         ApiService apiService = RetrofitClient.getApi();
         Call<List<TagData>> call = apiService.getTags(feedCount, imgCount); // 서버에서 태그 불러오기 API
-
         call.enqueue(new Callback<List<TagData>>() {
             @Override
             public void onResponse(Call<List<TagData>> call, Response<List<TagData>> response) {
@@ -551,7 +474,6 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     while (allTagLists.size() <= currentPage) {
                         allTagLists.add(new ArrayList<>()); // 빈 리스트 추가
                     }
-
                     // 태그 업데이트
                     holder.updateTags(updatedTags);
                     Log.d(TAG, "updateTagsFromServer: 태그 업데이트 완료");
@@ -559,16 +481,12 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     Log.e(TAG, "updateTagsFromServer: 서버 응답 실패");
                 }
             }
-
             @Override
             public void onFailure(Call<List<TagData>> call, Throwable t) {
                 Log.e(TAG, "updateTagsFromServer: 서버 호출 실패", t);
             }
         });
     }
-
-
-
     @Override
     public int getItemCount() {
         //크기를 가져온다
@@ -577,10 +495,8 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return size;
         //리스트 크기를 가져온다 + 1 (리스트 한개더 )
     }
-
     public static class BtnTopViewHolder extends RecyclerView.ViewHolder {
         RecyclerView recyclerView;
-
         public BtnTopViewHolder(@NonNull View itemView) {
             super(itemView);
             recyclerView = itemView.findViewById(R.id.recycler_view_horizontal);
@@ -588,7 +504,6 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             Log.d(TAG, "BtnTopViewHolder: 리사이클러뷰에 리사이클러뷰 레이아웃 연결");
         }
     }
-
     public static class FeedViewHolder extends RecyclerView.ViewHolder {
         //내부 클래스 피드뷰홀더
         private List<View> tagViews;
@@ -601,18 +516,15 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ImageView addTagButton;
         ImageView buttonMinimenu;
         FrameLayout tagContainer;
-
         public FeedViewHolder(@NonNull View itemView) {
 
             //피드 뷰홀더 실행
             super(itemView);
-
             Log.d(TAG, "FeedViewHolder : 실행");
             imgProfile = itemView.findViewById(R.id.img_profile);
             //프로필이미지 레이아웃연결
             Log.d(TAG, "FeedViewHolder : imgProfile연결 ");
             btnLike = itemView.findViewById(R.id.btn_like);
-
             tvNickname = itemView.findViewById(R.id.tv_nickname);
             //닉네임넥스트뷰 연결
             Log.d(TAG, "FeedViewHolder : tvNickname연결" + (tvNickname != null));
@@ -642,22 +554,16 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             Log.d(TAG, "FeedViewHolder: tag_container 연결");
             buttonMinimenu = itemView.findViewById(R.id.button_minimenu);
             tagViews = new ArrayList<>();
-
-
         }
 
         public void bind(Feed feed, List<List<TagData>> clientTagLists) {
             Log.d(TAG, "bind: 피드 데이터를 연결하기 시작");
-
-
             // 닉네임 설정
             tvNickname.setText(feed.getNickname());
             Log.d(TAG, "bind: 닉네임 설정 완료: " + feed.getNickname());
-
             // 피드 내용 설정
             tvFeed.setText(feed.getCaption());
             Log.d(TAG, "bind: 피드 내용 설정 완료: " + feed.getCaption());
-
             // 좋아요 수 설정 및 좋아요 상태 반영
             if (feed.isLiked()) {
                 btnLike.setImageResource(R.drawable.heartfill); // 좋아요 이미지
@@ -666,36 +572,27 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
             tvLikeCount.setText(String.valueOf(feed.getLikeCount()));
             Log.d(TAG, "bind: 좋아요 상태 및 좋아요 수 설정 완료"+ "좋아요상태 = " + feed.isLiked() + "좋아요 수 = " + feed.getLikeCount());
-
             // 댓글 수 설정
             tvCommentCount.setText(String.valueOf(feed.getCommentCount()));
             Log.d(TAG, "bind: 댓글 수 설정 완료: " + feed.getCommentCount());
-
             // 프로필 이미지 설정
             String profileImageUrl = "http://43.203.234.99/" + feed.getProfileImage();
             Log.d(TAG, "bind: 프로필 이미지 URL: " + profileImageUrl);
-
             Glide.with(itemView.getContext())
                     .load(profileImageUrl)
                     .placeholder(R.drawable.ic_launcher_foreground)
                     .apply(RequestOptions.circleCropTransform())
                     .into(imgProfile);
             Log.d(TAG, "bind: Glide로 프로필 이미지 로드 완료");
-
             // 이미지 URL과 태그 리스트 초기화
             List<String> imageUrlList = new ArrayList<>();
             List<List<TagData>> allTagLists = new ArrayList<>();
-
-
             Log.d(TAG, "bind: 이미지 URL과 태그 리스트 초기화 완료");
-
-
             // imageList에서 이미지 URL과 태그 데이터 추출
             for (ImageData imageData : feed.getImageList()) {
                 String fullImageUrl = "http://43.203.234.99/" + imageData.getImageUrl();
                 Log.d(TAG, "bind: 이미지 URL 추가: " + fullImageUrl);
                 imageUrlList.add(fullImageUrl);
-
                 // 태그 데이터 확인
                 List<TagData> tags = imageData.getTags();
                 if (tags != null) {
@@ -705,12 +602,10 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
                 allTagLists.add(tags);
             }
-
             // ImagePagerAdapter 설정
             ImagePagerAdapter imagePagerAdapter = new ImagePagerAdapter(itemView.getContext(), imageUrlList);
             viewPagerImages.setAdapter(imagePagerAdapter);
             Log.d(TAG, "bind: ViewPager2에 ImagePagerAdapter 연결 완료");
-
             // 인디케이터 설정
             indicator.setViewPager(viewPagerImages);
             Log.d(TAG, "bind: 인디케이터에 ViewPager2 연결 완료");
