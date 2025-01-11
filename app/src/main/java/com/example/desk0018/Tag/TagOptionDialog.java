@@ -51,6 +51,7 @@ public class TagOptionDialog extends Dialog {
         });
     }
 
+
     // TagOptionDialog 버튼 클릭 이벤트 리스너
     public interface OnTagActionListener {
         void onAddTag(Feed feed, CombinedAdapter.FeedViewHolder feedViewHolder);

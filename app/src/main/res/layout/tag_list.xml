@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:padding="8dp">
 
-    <!-- 유형 표시 -->
+
     <TextView
         android:id="@+id/tag_category"
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
         android:textColor="@android:color/darker_gray"
         android:layout_marginBottom="4dp" />
 
-    <!-- 태그 이름 및 버튼 -->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

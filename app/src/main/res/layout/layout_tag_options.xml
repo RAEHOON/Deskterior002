@@ -7,7 +7,7 @@
     android:background="@drawable/dialog_background"
     android:layout_gravity="center">
 
-    <!-- 다이얼로그 제목 -->
+
     <TextView
         android:id="@+id/dialog_title"
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
         android:paddingBottom="16dp"
         android:textColor="@android:color/black" />
 
-    <!-- 태그 추가 버튼 -->
+
     <Button
         android:id="@+id/btn_add_tag"
         android:layout_width="match_parent"
@@ -31,7 +31,7 @@
         android:textStyle="bold"
         android:layout_marginBottom="8dp" />
 
-    <!-- 태그 수정 버튼 -->
+
     <Button
         android:id="@+id/btn_edit_tag"
         android:layout_width="match_parent"
@@ -43,7 +43,7 @@
         android:textStyle="bold"
         android:layout_marginBottom="8dp" />
 
-    <!-- 태그 삭제 버튼 -->
+
     <Button
         android:id="@+id/btn_delete_tag"
         android:layout_width="match_parent"
