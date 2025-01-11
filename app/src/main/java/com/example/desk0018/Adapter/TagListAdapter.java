@@ -7,19 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.desk0018.R;
 import com.example.desk0018.Tag.TagData;
 import com.example.desk0018.Tag.WebViewActivity;
-
 import java.util.List;
 
 public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.TagViewHolder> {
     private List<TagData> tagList;
-
     public TagListAdapter(List<TagData> tagList) {
         this.tagList = tagList;
     }
@@ -30,7 +26,6 @@ public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.TagViewH
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.tag_list, parent, false);
         return new TagViewHolder(view);
     }
-
     @Override
     public void onBindViewHolder(@NonNull TagViewHolder holder, int position) {
         TagData tag = tagList.get(position);
@@ -42,17 +37,14 @@ public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.TagViewH
             v.getContext().startActivity(intent);
         });
     }
-
     @Override
     public int getItemCount() {
         return tagList.size();
     }
-
     public static class TagViewHolder extends RecyclerView.ViewHolder {
         TextView tagName;
         Button btnGoSite;
         TextView tagCategory; // 유형 표시
-
         public TagViewHolder(@NonNull View itemView) {
             super(itemView);
             tagName = itemView.findViewById(R.id.tag_name);

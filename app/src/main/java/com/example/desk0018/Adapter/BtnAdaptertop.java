@@ -31,22 +31,18 @@ import java.util.List;
  * 데이터를 뷰 형식으로 바꿔서 버튼탑리스트에 넣어줌
  *
  */
-
 public class BtnAdaptertop extends RecyclerView.Adapter<BtnAdaptertop.ItemViewHolder> {
-
     static String TAG = "BtnAdaptertop"; // 로그 태그
     private final Context context;
     //컨텍스트 객체생성
     private final List<Buttontop> btnList1;
     //리스트 생성 버튼탑 으로 구성된 리스트
-
     public BtnAdaptertop(Context context, List<Buttontop> btnList1) {
         Log.d(TAG, "BtnAdaptertop 어뎁터 초기화 , context, btnList1 ");
         this.context = context;
         this.btnList1 = btnList1;
         //컨텍스트랑 리스트를 어뎁터에 넣고 객체 초기화. this 붙은게 외부것들
     }
-
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -57,7 +53,6 @@ public class BtnAdaptertop extends RecyclerView.Adapter<BtnAdaptertop.ItemViewHo
         return new ItemViewHolder(view);
         // 위에 만든 view를 새로운 아이템뷰홀더에 적용
     }
-
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         //온바인드 뷰홀더 메서드
@@ -65,7 +60,6 @@ public class BtnAdaptertop extends RecyclerView.Adapter<BtnAdaptertop.ItemViewHo
         Buttontop buttontop = btnList1.get(position);
         //버튼탑 객채 생성하고, 리스트에서 position을 가져옴.
         Log.d(TAG, "onBindViewHolder에서 Buttontop 객체만듬, 이름: " + buttontop.getName());
-
         Glide.with(context)
                 //글라이드 .with 이 작업범위 그 안에 아까 만든 컨텍스트 넣기
                 .load(buttontop.getBtnImage())
@@ -81,18 +75,15 @@ public class BtnAdaptertop extends RecyclerView.Adapter<BtnAdaptertop.ItemViewHo
                 .into(holder.imageView);
         //위에서 넣은 이미지를 넣을 이미지뷰 위치 지정
         Log.d(TAG, "onBindViewHolder: 이미지가 imageView에 로드됨");
-
         holder.textView_image.setText(buttontop.getName());
         // 텍스트뷰이미지에다가 버튼탑에서 겟네임 해서 텍스트 설정?
         Log.d(TAG, "onBindViewHolder: TextView에 이름설정 - " + buttontop.getName());
-
         holder.itemView.setOnClickListener(v -> {
             // 아이템뷰를 클릭하면 메서드 실행하기
             Log.d(TAG, "onBindViewHolder: 아이템 클릭했고,  position값 = " + position);
             String buttonName = buttontop.getName();
             // 이름 확인하기 버튼탑에서 겟네임해서
             Log.d(TAG, "onBindViewHolder: 버튼 이름 = " + buttonName);
-
             Intent intent = null;
             // 인텐트를 생성해서 null로 설정해놓고
             switch (buttonName) {
@@ -130,7 +121,6 @@ public class BtnAdaptertop extends RecyclerView.Adapter<BtnAdaptertop.ItemViewHo
                     // 선정리 일 경우 인텐트
                     break;
             }
-
             if (intent != null) {
                 // 인텐트가 null 이 아니라면
                 Log.d(TAG, "onBindViewHolder: " + buttonName + " 액티비티 실행");
@@ -139,7 +129,6 @@ public class BtnAdaptertop extends RecyclerView.Adapter<BtnAdaptertop.ItemViewHo
             }
         });
     }
-
     @Override
     public int getItemCount() {
         //크기를 가져온다
@@ -148,15 +137,12 @@ public class BtnAdaptertop extends RecyclerView.Adapter<BtnAdaptertop.ItemViewHo
         return size;
         //리스트의 크기를 가져온다
     }
-
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
         // 아이템뷰홀더 클래스 생성 리사이클러뷰.뷰홀더 상속 (위에서 써먹을 수 있게)
-
         ImageView imageView;
         //이미지뷰생성
         TextView textView_image;
         //텍스트뷰 생성
-
         public ItemViewHolder(View itemView) {
             //아이템뷰홀더 메서드 생성 View itemView를 매개변수
             super(itemView);
