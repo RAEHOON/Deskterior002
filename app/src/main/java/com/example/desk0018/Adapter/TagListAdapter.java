@@ -15,7 +15,7 @@ import com.example.desk0018.Tag.WebViewActivity;
 import java.util.List;
 
 public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.TagViewHolder> {
-    private List<TagData> tagList;
+    private final List<TagData> tagList;
     public TagListAdapter(List<TagData> tagList) {
         this.tagList = tagList;
     }
