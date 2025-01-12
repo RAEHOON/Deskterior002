@@ -20,8 +20,6 @@ import com.example.desk0018.R;
 
 import com.example.desk0018.Server.ApiService;
 import com.example.desk0018.Server.RetrofitClient;
-import com.example.desk0018.Tag.ImageData;
-import com.example.desk0018.Tag.TagData;
 import com.example.desk0018.Users.Feed;
 
 import java.util.ArrayList;
@@ -82,11 +80,11 @@ public class Keyboard extends AppCompatActivity {
                     feedListkeyboard.clear();
                     feedListkeyboard.addAll(response.body());
 
-                    // "키보드" 태그가 포함된 피드만 필터링
                     for (Feed feed : response.body()) {
-                        if (containsKeyboardTag(feed)) {
-                            feedListkeyboard.add(feed);
-                        }
+                        Log.d("홈프레그먼트", "피드 내용: " + feed.getCaption());
+                        Log.d("홈프레그먼트", "닉네임: " + feed.getNickname());
+                        Log.d("홈프레그먼트", "좋아요 상태: " + feed.isLiked());
+                        Log.d("홈프레그먼트", "좋아요 수: " + feed.getLikeCount());
                     }
 
                     combinedAdapter.notifyDataSetChanged();
@@ -102,21 +100,6 @@ public class Keyboard extends AppCompatActivity {
                 Log.e("홈프레그먼트", "네트워크 오류: ", t);
             }
         });
-    }
-    // "키보드" 태그가 포함되어 있는지 확인
-    private boolean containsKeyboardTag(Feed feed) {
-        if (feed != null && feed.getImageList() != null) {
-            for (ImageData imageData : feed.getImageList()) {
-                if (imageData.getTags() != null) {
-                    for (TagData tagData : imageData.getTags()) {
-                        if ("키보드".equals(tagData.getName())) { // 태그 이름이 "키보드"인지 확인
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-        return false; // "키보드" 태그가 없으면 false 반환
     }
 
 
