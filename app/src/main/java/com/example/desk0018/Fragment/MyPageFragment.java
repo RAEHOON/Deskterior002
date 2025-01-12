@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.desk0018.R;
 import com.example.desk0018.Server.ApiService;
 import com.example.desk0018.Server.RetrofitClient;
@@ -149,6 +150,7 @@ public class MyPageFragment extends Fragment {
                 // 이미지 URL 로드
                 .placeholder(R.drawable.loding)
                 // 로딩 중 표시할 이미지
+                .apply(RequestOptions.circleCropTransform())
                 .error(R.drawable.error)
                 // 로드 실패 시 표시할 이미지
                 .into(imv_profile);
