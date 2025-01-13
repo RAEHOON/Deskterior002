@@ -3,6 +3,7 @@ package com.example.desk0018.Server;
 
 import com.example.desk0018.Tag.TagData;
 import com.example.desk0018.Users.Feed;
+import com.example.desk0018.Users.User;
 
 import java.util.List;
 
@@ -108,6 +109,12 @@ public interface ApiService {
             @Query("user_id") String userId,
             @Query("tag") String tag
     );
+
+    @GET("search_by_nickname.php")
+    Call<List<User>> searchByNickname(@Query("query") String query);
+
+    @GET("search_by_tag_name.php")
+    Call<List<TagData>> searchByTagName(@Query("query") String query);
 
 
 
