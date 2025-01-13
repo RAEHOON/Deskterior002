@@ -1,7 +1,7 @@
 package com.example.desk0018.Users;
 
 import com.example.desk0018.Tag.ImageData;
-import com.example.desk0018.Tag.TagData;
+
 
 import java.util.List;
 
@@ -73,20 +73,5 @@ public class Feed {
         isLiked = liked; // 좋아요 상태 수정
     }
 
-    public boolean containsTag(String tag) {
-        if (imageList != null) {
-            for (ImageData imageData : imageList) {
-                // ImageData의 tags 리스트에서 태그 검사
-                List<TagData> tags = imageData.getTags();
-                if (tags != null) {
-                    for (TagData tagData : tags) {
-                        if (tag.equals(tagData.getName())) { // 태그 이름 비교
-                            return true; // 태그가 포함되어 있으면 true 반환
-                        }
-                    }
-                }
-            }
-        }
-        return false; // 태그가 없으면 false 반환
-    }
+
 }

@@ -20,6 +20,8 @@ import com.example.desk0018.R;
 
 import com.example.desk0018.Server.ApiService;
 import com.example.desk0018.Server.RetrofitClient;
+import com.example.desk0018.Tag.ImageData;
+import com.example.desk0018.Tag.TagData;
 import com.example.desk0018.Users.Feed;
 
 import java.util.ArrayList;
@@ -40,26 +42,26 @@ public class Keyboard extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("KeyboardActivity", "onCreate: 액티비티 시작됨");
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_keyboard);
 
+        Log.d("KeyboardActivity", "onCreate: UI 초기화 시작");
         recyclerViewKeyboard = findViewById(R.id.recyclerView_keyboard);
         sharedPreferences = getSharedPreferences("로그인정보", Context.MODE_PRIVATE);
         feedListkeyboard = new ArrayList<>();
 
+        Log.d("KeyboardActivity", "onCreate: Adapter 설정 시작");
         combinedAdapter = new CombinedAdapter(this, new ArrayList<>(), feedListkeyboard, recyclerViewKeyboard);
         recyclerViewKeyboard.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewKeyboard.setAdapter(combinedAdapter);
 
-        // 구분선 추가
+        Log.d("KeyboardActivity", "onCreate: RecyclerView 구분선 추가");
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         recyclerViewKeyboard.addItemDecoration(dividerItemDecoration);
 
-
-
+        Log.d("KeyboardActivity", "onCreate: loadFeedsFromServer 호출");
         loadFeedsFromServer();
-
-
     }
 
     private void loadFeedsFromServer() {
@@ -101,6 +103,4 @@ public class Keyboard extends AppCompatActivity {
             }
         });
     }
-
-
 }

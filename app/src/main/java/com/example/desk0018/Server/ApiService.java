@@ -103,6 +103,12 @@ public interface ApiService {
             @Field("feed_count") int feedCount
     );
 
+    @GET("get_feeds_by_tag.php")
+    Call<List<Feed>> getFeedsByTag(
+            @Query("user_id") String userId,
+            @Query("tag") String tag
+    );
+
 
 
 
