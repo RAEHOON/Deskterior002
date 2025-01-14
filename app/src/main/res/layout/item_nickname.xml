@@ -14,7 +14,6 @@
         android:layout_marginEnd="8dp"
         android:src="@drawable/ic_launcher_foreground"
         android:scaleType="centerCrop"
-        android:background="@android:color/darker_gray"
         android:clipToOutline="true" />
 
 
@@ -26,4 +25,16 @@
         android:textSize="16sp"
         android:textColor="@android:color/black"
         android:layout_gravity="center_vertical" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/follow"
+        android:layout_width="80dp"
+        android:layout_height="48dp"
+        android:textSize="11sp"
+        android:text="follow" />
 </LinearLayout>

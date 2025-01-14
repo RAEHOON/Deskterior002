@@ -116,6 +116,10 @@ public interface ApiService {
     @GET("search_by_tag_name.php")
     Call<List<TagData>> searchByTagName(@Query("query") String query);
 
+    @GET("get_feeds_by_user.php")
+    Call<List<Feed>> getFeedsByNickname(@Query("nickname") String nickname);
+
+
 
 
 
