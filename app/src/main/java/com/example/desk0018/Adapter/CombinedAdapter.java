@@ -511,8 +511,8 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView tvNickname, tvFeed, tvLikeCount, tvCommentCount;
         ViewPager2 viewPagerImages;
         CircleIndicator3 indicator;
-        Button btnFollow;
         ImageView btnLike;
+        ImageView btnFollow;
         ImageView addTagButton;
         ImageView buttonMinimenu;
         FrameLayout tagContainer;
@@ -543,7 +543,7 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             indicator = itemView.findViewById(R.id.indicator);
             //인디케이터 레이아웃연결
             Log.d(TAG, "FeedViewHolder : indicator 연결");
-            btnFollow = itemView.findViewById(R.id.follow);
+            btnFollow = itemView.findViewById(R.id.button_follow);
             //팔로우버튼 버튼연결
             Log.d(TAG, "FeedViewHolder : follow 연결");
             addTagButton = itemView.findViewById(R.id.btn_add_tag);

@@ -81,7 +81,7 @@ public class UserDetailAdapter extends RecyclerView.Adapter<UserDetailAdapter.Fe
         private TextView CommentCount;
         private ViewPager2 viewpagerImages;
         private View indicator;
-        private Button btnFollow;
+        private ImageView btnFollow;
         private Button addTagButton;
         private ViewGroup tagContainer;
         private ImageView buttonMinimenu;
@@ -96,7 +96,7 @@ public class UserDetailAdapter extends RecyclerView.Adapter<UserDetailAdapter.Fe
             textViewfeeds = itemView.findViewById(R.id.tv_feed);
             imageViewProfile = itemView.findViewById(R.id.img_profile);
             indicator = itemView.findViewById(R.id.indicator);
-            btnFollow = itemView.findViewById(R.id.follow);
+            btnFollow = itemView.findViewById(R.id.button_follow);
             addTagButton = itemView.findViewById(R.id.btn_add_tag);
             tagContainer = itemView.findViewById(R.id.tag_container);
             buttonMinimenu = itemView.findViewById(R.id.button_minimenu);

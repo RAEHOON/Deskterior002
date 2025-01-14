@@ -7,7 +7,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="47dp"
+        android:layout_height="55dp"
         android:orientation="horizontal"
         android:background="@color/white">
 
@@ -16,7 +16,9 @@
             android:layout_width="47dp"
             android:layout_height="47dp"
             android:contentDescription="프로필 이미지"
-            app:srcCompat="@drawable/ic_launcher_foreground" />
+            app:srcCompat="@drawable/ic_launcher_foreground"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"/>
 
         <TextView
             android:id="@+id/tv_nickname"
@@ -24,19 +26,33 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:textColor="@color/black"
-            android:text="nickname" />
+            android:text="nickname"
+            android:layout_marginTop="17dp"/>
 
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
-        <Button
-            android:id="@+id/follow"
-            android:layout_width="80dp"
-            android:layout_height="48dp"
-            android:textSize="11sp"
-            android:text="follow" />
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/button_follow"
+            app:srcCompat="@drawable/follow"
+            android:layout_marginTop="13dp"
+            android:layout_marginRight="10dp">
+
+        </ImageView>
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:id="@+id/button_minimenu"
+            app:srcCompat="@drawable/threedot"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="15dp">
+
+        </ImageView>
     </LinearLayout>
 
 
@@ -112,14 +128,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
-        <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:id="@+id/button_minimenu"
-            app:srcCompat="@drawable/threeline"
-            android:layout_marginRight="10dp">
 
-        </ImageView>
 
         <ImageView
             android:id="@+id/btn_add_tag"
