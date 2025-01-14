@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.example.desk0018.R;
 import com.example.desk0018.Topmenu.Buttontop;
 import com.example.desk0018.Topmenu.Case;
+import com.example.desk0018.Topmenu.EtcActivity;
 import com.example.desk0018.Topmenu.Keyboard;
 import com.example.desk0018.Topmenu.Lighting;
 import com.example.desk0018.Topmenu.Monitor;
@@ -119,6 +120,10 @@ public class BtnAdaptertop extends RecyclerView.Adapter<BtnAdaptertop.ItemViewHo
                 case "선 정리":
                     intent = new Intent(context, Multitap.class);
                     // 선정리 일 경우 인텐트
+                    break;
+                case "기타":
+                    intent = new Intent(context, EtcActivity.class);
+                    // 기타 일 경우 인텐트
                     break;
             }
             if (intent != null) {

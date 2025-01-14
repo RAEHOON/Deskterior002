@@ -72,8 +72,10 @@ public class Keyboard extends AppCompatActivity {
             return;
         }
 
+        String tagFilter = "키보드"; // 키보드 태그를 필터링
+
         ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
-        Call<List<Feed>> call = apiService.getFeeds(userId);
+        Call<List<Feed>> call = apiService.getFeedsByTag(userId, tagFilter);
 
         call.enqueue(new Callback<List<Feed>>() {
             @Override
@@ -81,25 +83,17 @@ public class Keyboard extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     feedListkeyboard.clear();
                     feedListkeyboard.addAll(response.body());
-
-                    for (Feed feed : response.body()) {
-                        Log.d("홈프레그먼트", "피드 내용: " + feed.getCaption());
-                        Log.d("홈프레그먼트", "닉네임: " + feed.getNickname());
-                        Log.d("홈프레그먼트", "좋아요 상태: " + feed.isLiked());
-                        Log.d("홈프레그먼트", "좋아요 수: " + feed.getLikeCount());
-                    }
-
                     combinedAdapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(Keyboard.this, "피드를 불러오지 못했습니다.", Toast.LENGTH_SHORT).show();
-                    Log.e("홈프레그먼트", "응답 실패: " + response.errorBody());
+                    Log.e("KeyboardActivity", "응답 실패: " + response.errorBody());
                 }
             }
 
             @Override
             public void onFailure(Call<List<Feed>> call, Throwable t) {
                 Toast.makeText(Keyboard.this, "네트워크 오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.e("홈프레그먼트", "네트워크 오류: ", t);
+                Log.e("KeyboardActivity", "네트워크 오류: ", t);
             }
         });
     }

@@ -57,6 +57,7 @@ public class HomeFragment extends Fragment {
         buttontopList.add(new Buttontop(R.drawable.caseeee, "케이스"));
         buttontopList.add(new Buttontop(R.drawable.deskkkk, "테이블"));
         buttontopList.add(new Buttontop(R.drawable.multititi, "선 정리"));
+        buttontopList.add(new Buttontop(R.drawable.etccccc, "기타"));
 
         feedList = new ArrayList<>();
 
