@@ -93,6 +93,10 @@ public class SearchFragment extends Fragment {
                     searchResults.addAll(nicknameResults); // 닉네임 결과 추가
                     searchAdapter.notifyDataSetChanged();
                     Log.d(TAG, "search: 닉네임 결과 RecyclerView 업데이트 완료");
+                    for (int i = 0; i < nicknameResults.size(); i++ ) {
+                        User user = nicknameResults.get(i);
+                        Log.d(TAG, "닉네임 결과 = "+user.getNickname());
+                    }
 
                     // 태그 검색
                     searchTags(query);
