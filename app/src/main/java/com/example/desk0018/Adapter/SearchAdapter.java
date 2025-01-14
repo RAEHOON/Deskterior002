@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.desk0018.R;
 import com.example.desk0018.Tag.TagData;
+import com.example.desk0018.Tag.WebViewActivity;
 import com.example.desk0018.Users.User;
 import com.example.desk0018.Users.UserDetailActivity;
 
@@ -141,8 +142,9 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             Log.d(TAG, "TagViewHolder.bind: 태그 이름 설정 = " + tag.getName());
             tvTagName.setText(tag.getName());
             btnGoSite.setOnClickListener(v -> {
-                Log.d(TAG, "TagViewHolder.bind: 태그 URL 열기 = " + tag.getUrl());
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(tag.getUrl()));
+                Log.d(TAG, "태그 클릭됨: URL 이동: " + tag.getUrl());
+                Intent intent = new Intent(itemView.getContext(), WebViewActivity.class);
+                intent.putExtra("url", tag.getUrl());
                 itemView.getContext().startActivity(intent);
             });
         }
