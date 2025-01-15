@@ -17,14 +17,19 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.desk0018.Adapter.ViewPagerAdapter;
+import com.example.desk0018.Dialog.MypageDialog;
 import com.example.desk0018.R;
 import com.example.desk0018.Server.ApiService;
 import com.example.desk0018.Server.RetrofitClient;
 import com.example.desk0018.Server.UserProfileResponse;
 import com.example.desk0018.Users.Login;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,13 +37,14 @@ import retrofit2.Response;
 
 public class MyPageFragment extends Fragment {
     // MyPageFragment 클래스 생성 프래그먼트 상속
-
-    Button btnLogout;
-    // 로그아웃 버튼 변수 생성
     ImageView imv_profile;
     // 프로필 이미지를 표시할 ImageView 변수 생성
+    ImageView imageView_mypage_dialog;
     TextView tv_nickname;
     // 닉네임을 표시할 TextView 변수 생성
+    private TabLayout tabLayout_mypage;
+    private ViewPager2 viewPager_mypage;
+
 
     @Nullable
     @Override
@@ -47,12 +53,28 @@ public class MyPageFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.activity_mypage_fragment, container, false);
         //레이아웃을 바꿔서 뷰로 받기
-        btnLogout = view.findViewById(R.id.btn_logout);
-        // 레이아웃에서 로그아웃 버튼 연결
+        tabLayout_mypage = view.findViewById(R.id.tabLayout_mypage);
+        viewPager_mypage = view.findViewById(R.id.viewPager_mypage);
+
         imv_profile = view.findViewById(R.id.imv_profile);
         // 레이아웃에서 프로필 이미지를 표시할 이미지뷰연결
         tv_nickname = view.findViewById(R.id.tv_nickname);
         // 레이아웃에서 닉네임을 표시할 텍스트뷰 연결
+        imageView_mypage_dialog = view.findViewById(R.id.imageView_threedot);
+
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), getLifecycle());
+        viewPager_mypage.setAdapter(viewPagerAdapter);
+
+        new TabLayoutMediator(tabLayout_mypage, viewPager_mypage, (tab, position) -> {
+
+            if (position == 0) {
+                tab.setText(" 내 피드");
+            } else {
+                tab.setText(" 즐겨찾는 피드");
+
+            }
+        }).attach();
+
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("로그인정보", MODE_PRIVATE);
         // 셰어드를 써서 "로그인정보"라는 이름의 파일에서 데이터 가져오기
@@ -65,12 +87,20 @@ public class MyPageFragment extends Fragment {
             //유저프로파일 데이터 호출
         }
 
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-            //로그아웃 버튼 클릭 이벤트 설정
-            @Override
-            public void onClick(View v) {
-                //버튼 클릭 시 실행되는 코드
+        imageView_mypage_dialog.setOnClickListener(v -> showMypageDialog());
 
+        return view;
+        //View 반환
+    }
+
+    private void showMypageDialog(){
+        MypageDialog dialog = new MypageDialog(getContext(), new MypageDialog.OnMypageActionListener() {
+            @Override
+            public void onEditMyself() {
+
+            }
+            @Override
+            public void onLogOut() {
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("로그인정보", MODE_PRIVATE);
                 // 셰어드를 써서 "로그인정보"라는 이름의 파일에서 데이터 가져오기
                 SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -78,19 +108,20 @@ public class MyPageFragment extends Fragment {
                 editor.clear();
                 //에디터 초기화
                 editor.apply();
-                // 변경사항 저장
-
                 Intent intent = new Intent(getActivity(), Login.class);
                 //로그인으로 가는 인텐트 생성
                 startActivity(intent);
                 //로그인엑티비티 실행하기
                 getActivity().finish();
                 //현재 액티비티 종료
+
+            }
+            @Override
+            public void onDeleteMyself() {
+
             }
         });
-
-        return view;
-        //View 반환
+        dialog.show();
     }
 
     private void loadUserProfile() {

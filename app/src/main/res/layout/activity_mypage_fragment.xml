@@ -4,31 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="닉네임 : "
-            android:textSize="20dp">
-
-        </TextView>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tv_nickname"
-            android:textSize="20dp"
-            android:text="닉네임자리"
-            >
-
-        </TextView>
-
-    </LinearLayout>
-
-
+        android:id="@+id/tv_nickname"
+        android:textSize="20dp"
+        android:text="닉네임자리"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        >
+    </TextView>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -40,8 +25,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/imv_profile"
             app:srcCompat="@drawable/ic_launcher_foreground">
-
         </ImageView>
+
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -49,28 +34,36 @@
 
         </View>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_logout"
-            android:text="로그아웃"
-            android:layout_gravity="center">
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:srcCompat="@drawable/threedot"
+            android:id="@+id/imageView_threedot"
+            android:layout_marginTop="40dp"
+            android:layout_marginRight="10dp">
 
-        </Button>
+        </ImageView>
     </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="아래로는 본인이 올린 피드 바둑판식"
-        android:textSize="24sp"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_mypage"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="492dp">
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray" />
 
-    </androidx.recyclerview.widget.RecyclerView>
+    <!-- TabLayout 추가 -->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout_mypage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabIndicatorColor="@android:color/holo_blue_dark"
+        app:tabSelectedTextColor="@android:color/holo_blue_dark"
+        app:tabTextColor="@android:color/darker_gray" />
+
+    <!-- ViewPager2 추가 -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager_mypage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 
 
