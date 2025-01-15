@@ -1,4 +1,4 @@
-package com.example.desk0018.Tag;
+package com.example.desk0018.Dialog;
 
 import android.app.Dialog;
 import android.content.Context;

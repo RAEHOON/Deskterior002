@@ -1,9 +1,8 @@
-package com.example.desk0018.Tag;
+package com.example.desk0018.Dialog;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 
 import com.example.desk0018.Adapter.CombinedAdapter;

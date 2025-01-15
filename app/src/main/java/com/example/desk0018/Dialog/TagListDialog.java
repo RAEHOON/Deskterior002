@@ -1,4 +1,4 @@
-package com.example.desk0018.Tag;
+package com.example.desk0018.Dialog;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -7,12 +7,7 @@ import android.util.Log;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,6 +15,7 @@ import com.example.desk0018.Adapter.TagListAdapter;
 import com.example.desk0018.R;
 import com.example.desk0018.Server.ApiService;
 import com.example.desk0018.Server.RetrofitClient;
+import com.example.desk0018.Tag.TagData;
 
 import java.util.List;
 
