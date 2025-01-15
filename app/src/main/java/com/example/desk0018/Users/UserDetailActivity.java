@@ -81,33 +81,30 @@ public class UserDetailActivity extends AppCompatActivity {
     }
 
     private void loadUserFeeds(String nickname) {
-        Log.d(TAG, "loadUserFeeds: 사용자 피드 로드 시작 - 닉네임: " + nickname);
-
         ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
         Call<List<Feed>> call = apiService.getFeedsByNickname(nickname);
-
-        Log.d(TAG, "loadUserFeeds: API 호출 준비 완료");
 
         call.enqueue(new Callback<List<Feed>>() {
             @Override
             public void onResponse(Call<List<Feed>> call, Response<List<Feed>> response) {
-                Log.d(TAG, "onResponse: API 응답 수신");
-
                 if (response.isSuccessful() && response.body() != null) {
-                    Log.d(TAG, "onResponse: 응답 성공 - 피드 수: " + response.body().size());
                     userFeeds.clear();
                     userFeeds.addAll(response.body());
                     combinedAdapter.notifyDataSetChanged();
-                    Log.d(TAG, "onResponse: RecyclerView 업데이트 완료");
+
+                    Log.d(TAG, "사용자 피드 로드 성공");
+                    for (Feed feed : userFeeds) {
+                        Log.d(TAG, "피드 내용: " + feed.getCaption());
+                    }
                 } else {
-                    Log.e(TAG, "onResponse: 응답 실패 - 코드: " + response.code());
-                    Toast.makeText(UserDetailActivity.this, "피드를 불러오지 못했습니다.", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "사용자 피드 로드 실패: " + response.errorBody());
+                    Toast.makeText(UserDetailActivity.this, "사용자 피드를 불러오지 못했습니다.", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<Feed>> call, Throwable t) {
-                Log.e(TAG, "onFailure: 네트워크 오류", t);
+                Log.e(TAG, "네트워크 오류 또는 서버 요청 실패", t);
                 Toast.makeText(UserDetailActivity.this, "네트워크 오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
