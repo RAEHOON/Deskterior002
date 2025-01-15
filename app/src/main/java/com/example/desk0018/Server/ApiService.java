@@ -119,6 +119,16 @@ public interface ApiService {
     @GET("get_feeds_by_user.php")
     Call<List<Feed>> getFeedsByNickname(@Query("nickname") String nickname);
 
+    @FormUrlEncoded
+    @POST("update_favorite.php")
+    Call<ServerResponse> updateFavorite(
+            @Field("user_id") String userId,
+            @Field("feed_count") int feedCount
+    );
+
+    @GET("get_feeds_by_favorite.php")
+    Call<List<Feed>> getFavoriteFeedsByNickname(@Query("nickname") String nickname);
+
 
 
 

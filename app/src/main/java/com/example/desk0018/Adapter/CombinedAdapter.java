@@ -158,6 +158,50 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     feedViewHolder.addTagButton.setVisibility(View.GONE);
                     Log.d(TAG, "본인의 글이 아닙니다. 태그 추가 버튼 숨김");
                 }
+
+                feedViewHolder.buttonKinchat.setOnClickListener(v -> {
+                    String userId = sharedPreferences.getString("user_id", null);
+                    if (userId == null) {
+                        Toast.makeText(context, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    int feedCount = feed.getFeedCount();
+                    boolean isFavorited = feed.isFavorited();
+
+                    // UI 즉각 업데이트: 즐겨찾기 상태 및 이미지 변경
+                    feed.setFavorited(!isFavorited);
+                    feedViewHolder.buttonKinchat.setImageResource(!isFavorited ? R.drawable.kinchat222 : R.drawable.kinchat);
+
+                    ApiService apiService = RetrofitClient.getApi();
+                    Call<ServerResponse> call = apiService.updateFavorite(userId, feedCount);
+
+                    // 서버 통신 시작 (UI는 이미 변경된 상태)
+                    call.enqueue(new Callback<ServerResponse>() {
+                        @Override
+                        public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
+                            if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                                Log.d(TAG, "즐겨찾기 상태 서버 업데이트 성공");
+                            } else {
+                                // 서버 실패 시 UI 상태 복구
+                                feed.setFavorited(isFavorited);
+                                feedViewHolder.buttonKinchat.setImageResource(isFavorited ? R.drawable.kinchat222 : R.drawable.kinchat);
+                                Log.e(TAG, "즐겨찾기 상태 서버 업데이트 실패");
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ServerResponse> call, Throwable t) {
+                            // 서버 연결 실패 시 UI 상태 복구
+                            feed.setFavorited(isFavorited);
+                            feedViewHolder.buttonKinchat.setImageResource(isFavorited ? R.drawable.kinchat222 : R.drawable.kinchat);
+                            Log.e(TAG, "서버 연결 실패", t);
+                        }
+                    });
+                });
+
+
+
                 feedViewHolder.btnLike.setOnClickListener(v -> {
                     String userId = sharedPreferences.getString("user_id", null);
                     if (userId == null) {
@@ -510,6 +554,7 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ViewPager2 viewPagerImages;
         CircleIndicator3 indicator;
         ImageView btnLike;
+        ImageView buttonKinchat;
         ImageView btnFollow;
         ImageView addTagButton;
         ImageView buttonMinimenu;
@@ -523,6 +568,7 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             //프로필이미지 레이아웃연결
             Log.d(TAG, "FeedViewHolder : imgProfile연결 ");
             btnLike = itemView.findViewById(R.id.btn_like);
+            buttonKinchat = itemView.findViewById(R.id.btn_kinchat);
             tvNickname = itemView.findViewById(R.id.tv_nickname);
             //닉네임넥스트뷰 연결
             Log.d(TAG, "FeedViewHolder : tvNickname연결" + (tvNickname != null));
@@ -570,6 +616,15 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
             tvLikeCount.setText(String.valueOf(feed.getLikeCount()));
             Log.d(TAG, "bind: 좋아요 상태 및 좋아요 수 설정 완료"+ "좋아요상태 = " + feed.isLiked() + "좋아요 수 = " + feed.getLikeCount());
+
+            // **즐겨찾기 상태 반영**
+            if (feed.isFavorited()) {
+                buttonKinchat.setImageResource(R.drawable.kinchat222); // 즐겨찾기된 상태
+            } else {
+                buttonKinchat.setImageResource(R.drawable.kinchat); // 기본 상태
+            }
+            Log.d(TAG, "bind: 즐겨찾기 상태 설정 완료: " + feed.isFavorited());
+
             // 댓글 수 설정
             tvCommentCount.setText(String.valueOf(feed.getCommentCount()));
             Log.d(TAG, "bind: 댓글 수 설정 완료: " + feed.getCommentCount());
