@@ -45,7 +45,7 @@ public class FavoriteFeedFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_favorite_feed_fragment, container, false);
 
-        // RecyclerView 초기화
+
         recyclerView = view.findViewById(R.id.recyclerView_favorite_feed);
         favoriteFeeds = new ArrayList<>();
         combinedAdapter = new CombinedAdapter(getContext(), new ArrayList<>(), favoriteFeeds, recyclerView);
@@ -60,7 +60,7 @@ public class FavoriteFeedFragment extends Fragment {
             // 즐겨찾기한 피드 로드
             loadFavoriteFeeds(nickname);
         } else {
-            Log.e(TAG, "nickname이 null입니다.");
+            Log.d(TAG, "nickname이 null입니다.");
         }
 
         return view;
@@ -84,10 +84,10 @@ public class FavoriteFeedFragment extends Fragment {
                     }
                 } else {
                     try {
-                        String error = response.errorBody().string(); // 에러 메시지 읽기
-                        Log.e(TAG, "즐겨찾기 피드 로드 실패: " + error);
+                        String error = response.errorBody().string();
+                        Log.d(TAG, "즐겨찾기 피드 로드 실패: " + error);
                     } catch (IOException e) {
-                        Log.e(TAG, "errorBody 읽기 실패: " + e.getMessage());
+                        Log.d(TAG, "errorBody 읽기 실패: " + e.getMessage());
                     }
                     Toast.makeText(getContext(), "즐겨찾기 피드를 불러오지 못했습니다.", Toast.LENGTH_SHORT).show();
                 }
@@ -95,7 +95,7 @@ public class FavoriteFeedFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<Feed>> call, Throwable t) {
-                Log.e(TAG, "네트워크 오류 또는 서버 요청 실패", t);
+                Log.d(TAG, "네트워크 오류 또는 서버 요청 실패", t);
                 Toast.makeText(getContext(), "네트워크 오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
