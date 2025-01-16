@@ -45,14 +45,14 @@ public class MyFeedFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_my_feed_fragment, container, false);
 
-        // RecyclerView 초기화
+
         recyclerView = view.findViewById(R.id.recyclerView_feed);
         myFeeds = new ArrayList<>();
         combinedAdapter = new CombinedAdapter(getContext(), new ArrayList<>(), myFeeds, recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(combinedAdapter);
 
-        // 로그인된 사용자 정보 가져오기
+
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("로그인정보", Context.MODE_PRIVATE);
                 String nickname = sharedPreferences.getString("nickname", null);
 
@@ -85,9 +85,9 @@ public class MyFeedFragment extends Fragment {
                 } else {
                     try {
                         String error = response.errorBody().string(); // 에러 메시지 읽기
-                        Log.e(TAG, "사용자 피드 로드 실패: " + error);
+                        Log.d(TAG, "사용자 피드 로드 실패: " + error);
                     } catch (IOException e) {
-                        Log.e(TAG, "errorBody 읽기 실패: " + e.getMessage());
+                        Log.d(TAG, "errorBody 읽기 실패: " + e.getMessage());
                     }
                     Toast.makeText(getContext(), "사용자 피드를 불러오지 못했습니다.", Toast.LENGTH_SHORT).show();
                 }
@@ -95,7 +95,7 @@ public class MyFeedFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<Feed>> call, Throwable t) {
-                Log.e(TAG, "네트워크 오류 또는 서버 요청 실패", t);
+                Log.d(TAG, "네트워크 오류 또는 서버 요청 실패", t);
                 Toast.makeText(getContext(), "네트워크 오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
