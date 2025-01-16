@@ -767,18 +767,6 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             tagViews.clear();
             Log.d(TAG, "removeExistingTags: 기존 태그 뷰 삭제 완료");
         }
-        public void addTagToClient(List<List<TagData>> clientTagLists, TagData newTag) {
-            int currentPage = viewPagerImages.getCurrentItem(); // 현재 페이지 가져오기
-            Log.d(TAG, "addTagToClient: 현재 페이지: " + currentPage);
-
-
-            while (clientTagLists.size() <= currentPage) {
-                // 클라이언트 캐시에 태그 추가
-                clientTagLists.add(new ArrayList<>()); // 빈 리스트 추가
-            }
-            clientTagLists.get(currentPage).add(newTag);
-            Log.d(TAG, "addTagToCache: 클라이언트 캐시에 태그 추가 완료");
-        }
 
 
     }
