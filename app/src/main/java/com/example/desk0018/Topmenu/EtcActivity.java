@@ -67,7 +67,7 @@ public class EtcActivity extends AppCompatActivity {
             return;
         }
 
-        String tagFilter = "기타"; //
+        String tagFilter = "기타";
 
         ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
         Call<List<Feed>> call = apiService.getFeedsByTag(userId, tagFilter);
