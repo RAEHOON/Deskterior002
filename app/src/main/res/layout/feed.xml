@@ -13,18 +13,16 @@
 
         <ImageView
             android:id="@+id/img_profile"
-            android:layout_width="47dp"
-            android:layout_height="47dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:contentDescription="프로필 이미지"
             app:srcCompat="@drawable/ic_launcher_foreground"
-            android:layout_marginTop="3dp"
-            android:layout_marginBottom="3dp"/>
+            android:layout_margin="8dp"/>
 
         <TextView
             android:id="@+id/tv_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:textColor="@color/black"
             android:text="nickname"
             android:layout_marginTop="17dp"/>
@@ -76,18 +74,19 @@
             android:textColor="@android:color/black"
             android:text="1/1"
             android:textSize="14sp" />
+
+        <me.relex.circleindicator.CircleIndicator3
+            android:id="@+id/indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_gravity="bottom|center"
+            app:ci_width="4dp"
+            app:ci_height="4dp"
+            app:ci_drawable="@drawable/select_circle"
+            app:ci_drawable_unselected="@drawable/select_circle" />
     </FrameLayout>
 
-    <me.relex.circleindicator.CircleIndicator3
-        android:id="@+id/indicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        app:ci_width="8dp"
-        app:ci_height="8dp"
-        app:ci_margin="6dp"
-        app:ci_drawable="@drawable/select_circle"
-        app:ci_drawable_unselected="@drawable/unselected_circle" />
+
 
     <LinearLayout
         android:layout_width="match_parent"
