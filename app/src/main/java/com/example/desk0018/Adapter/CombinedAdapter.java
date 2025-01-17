@@ -770,5 +770,11 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
     }
+    public void updateFeedList(List<Feed> newFeedList) {
+        feedList.clear(); // 기존 데이터 초기화
+        feedList.addAll(newFeedList); // 새로운 데이터 추가
+        notifyDataSetChanged(); // 어댑터 갱신
+        Log.d(TAG, "CombinedAdapter 데이터 업데이트 완료, 새 리스트 크기: " + feedList.size());
+    }
 
 }
