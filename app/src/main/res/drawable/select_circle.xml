@@ -2,5 +2,6 @@
 <!-- res/drawable/selected_circle.xml -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <solid android:color="@android:color/black" /> <!-- 선택된 점의 색상 설정 -->
-    <corners android:radius="50dp" /> <!-- 점을 둥글게 -->
+    <corners android:radius="50dp" />
+    <size android:width="8dp" android:height="8dp"/><!-- 점을 둥글게 -->
 </shape>
