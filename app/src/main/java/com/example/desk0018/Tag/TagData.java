@@ -7,12 +7,14 @@ public class TagData {
     private String name; // 태그 이름
     private String url; // 태그 URL
 
+
     public TagData(String category, int x, int y, String name, String url) {
         this.category = category;
         this.x = x;
         this.y = y;
         this.name = name;
         this.url = url;
+
     }
 
     // Getter 및 Setter
@@ -28,9 +30,8 @@ public class TagData {
         return x;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
+
+    public void setX(int x) { this.x = x; }
 
     public int getY() {
         return y;
@@ -55,4 +56,5 @@ public class TagData {
     public void setUrl(String url) {
         this.url = url;
     }
+
 }

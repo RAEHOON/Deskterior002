@@ -26,6 +26,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.desk0018.Dialog.TagEditDialog;
 import com.example.desk0018.R;
 import com.example.desk0018.Server.ApiService;
 import com.example.desk0018.Server.RetrofitClient;
@@ -485,14 +486,21 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             Log.d(TAG, "AddTagDialog 표시됨");
                         }
                         @Override
-                        public void onEditTag(Feed feed) {
-                            Log.d(TAG, "태그 수정 선택됨");
-                            Toast.makeText(context, "태그 수정 기능은 아직 구현되지 않았습니다.", Toast.LENGTH_SHORT).show();
-                        }
-                        @Override
                         public void onDeleteTag(Feed feed) {
                             Log.d(TAG, "태그 삭제 선택됨");
-                            Toast.makeText(context, "태그 삭제 기능은 아직 구현되지 않았습니다.", Toast.LENGTH_SHORT).show();
+                            int feedCount = feed.getFeedCount(); // 해당 피드의 feed_count
+                            int imageCount = -1; // 초기값 설정
+                            if (feed.getImageList() != null) {
+                                // ViewPager2의 현재 페이지 위치에서 이미지 카운트 가져오기2
+                                int currentImagePosition = feedViewHolder.viewPagerImages.getCurrentItem();
+                                Log.d(TAG, "현재 ViewPager 이미지 position: " + currentImagePosition);
+                                if (currentImagePosition < feed.getImageList().size()) {
+                                    imageCount = feed.getImageList().get(currentImagePosition).getImageCount();
+                                }
+                            }
+                            // TagEditDialog를 띄움
+                            TagEditDialog dialog = new TagEditDialog(holder.itemView.getContext(), feedCount, imageCount);
+                            dialog.show();
                         }
                     });
                     dialog.show();

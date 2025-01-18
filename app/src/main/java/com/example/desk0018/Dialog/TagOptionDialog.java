@@ -12,7 +12,6 @@ import com.example.desk0018.Users.Feed;
 public class TagOptionDialog extends Dialog {
 
     private Button btnAddTag;
-    private Button btnEditTag;
     private Button btnDeleteTag;
 
     public TagOptionDialog(Context context, Feed feed, CombinedAdapter.FeedViewHolder feedViewHolder, OnTagActionListener listener) {
@@ -22,7 +21,6 @@ public class TagOptionDialog extends Dialog {
 
         // 버튼 연결
         btnAddTag = findViewById(R.id.btn_add_tag);
-        btnEditTag = findViewById(R.id.btn_edit_tag);
         btnDeleteTag = findViewById(R.id.btn_delete_tag);
 
         // 태그 추가 버튼 클릭 이벤트
@@ -30,14 +28,6 @@ public class TagOptionDialog extends Dialog {
             dismiss(); // 다이얼로그 닫기
             if (listener != null) {
                 listener.onAddTag(feed, feedViewHolder);
-            }
-        });
-
-        // 태그 수정 버튼 클릭 이벤트
-        btnEditTag.setOnClickListener(view -> {
-            dismiss(); // 다이얼로그 닫기
-            if (listener != null) {
-                listener.onEditTag(feed);
             }
         });
 
@@ -54,7 +44,6 @@ public class TagOptionDialog extends Dialog {
     // TagOptionDialog 버튼 클릭 이벤트 리스너
     public interface OnTagActionListener {
         void onAddTag(Feed feed, CombinedAdapter.FeedViewHolder feedViewHolder);
-        void onEditTag(Feed feed);
         void onDeleteTag(Feed feed);
     }
 }

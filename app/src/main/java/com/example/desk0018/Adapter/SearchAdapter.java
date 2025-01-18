@@ -59,7 +59,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             Log.d(TAG, "onCreateViewHolder: NicknameViewHolder 생성");
             return new NicknameViewHolder(view);
         } else if (viewType == VIEW_TYPE_TAG) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tag, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.tag_list, parent, false);
             Log.d(TAG, "onCreateViewHolder: TagViewHolder 생성");
             return new TagViewHolder(view);
         }
