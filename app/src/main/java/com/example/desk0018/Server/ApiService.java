@@ -129,6 +129,13 @@ public interface ApiService {
     @GET("get_feeds_by_favorite.php")
     Call<List<Feed>> getFavoriteFeedsByNickname(@Query("nickname") String nickname);
 
+    @POST("delete_tag.php")
+    @FormUrlEncoded
+    Call<ServerResponse> deleteTag(
+            @Field("image_count") int imageCount,
+            @Field("tag_name") String tagName
+    );
+
 
 
 
