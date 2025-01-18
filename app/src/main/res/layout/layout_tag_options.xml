@@ -33,22 +33,10 @@
 
 
     <Button
-        android:id="@+id/btn_edit_tag"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="태그 수정"
-        android:padding="12dp"
-        android:background="@drawable/button_background"
-        android:textColor="@android:color/white"
-        android:textStyle="bold"
-        android:layout_marginBottom="8dp" />
-
-
-    <Button
         android:id="@+id/btn_delete_tag"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="태그 삭제"
+        android:text="태그 수정, 삭제"
         android:padding="12dp"
         android:background="@drawable/button_background"
         android:textColor="@android:color/white"

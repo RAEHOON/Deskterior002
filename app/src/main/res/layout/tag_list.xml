@@ -10,7 +10,7 @@
         android:id="@+id/tag_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="유형"
+        android:text="카테고리"
         android:textSize="14sp"
         android:textColor="@android:color/darker_gray"
         android:layout_marginBottom="4dp" />
