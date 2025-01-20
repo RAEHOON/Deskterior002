@@ -153,10 +153,10 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 Log.d(TAG, "게시글 닉네임: " + feed.getNickname());
                 // 태그 추가 버튼 가시성 설정
                 if (feed.getNickname() != null && feed.getNickname().equals(loggedInNickname)) {
-                    feedViewHolder.addTagButton.setVisibility(View.VISIBLE);
+                    feedViewHolder.buttonMinimenu.setVisibility(View.VISIBLE);
                     Log.d(TAG, "본인의 글입니다. 태그 추가 버튼 표시");
                 } else {
-                    feedViewHolder.addTagButton.setVisibility(View.GONE);
+                    feedViewHolder.buttonMinimenu.setVisibility(View.GONE);
                     Log.d(TAG, "본인의 글이 아닙니다. 태그 추가 버튼 숨김");
                 }
 
@@ -240,22 +240,7 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 feedViewHolder.buttonMinimenu.setOnClickListener(v -> {
                     String postNickname = feed.getNickname();
                     MiniMenuDialog miniMenuDialog = new MiniMenuDialog(holder.itemView.getContext(),loggedInNickname, postNickname, new MiniMenuDialog.OnMiniMenuActionListener() {
-                        @Override
-                        public void onShowTags() {
-                            int feedCount = feed.getFeedCount(); // 해당 피드의 feed_count
-                            int imageCount = -1; // 초기값 설정
-                            if (feed.getImageList() != null) {
-                                // ViewPager2의 현재 페이지 위치에서 이미지 카운트 가져오기2
-                                int currentImagePosition = feedViewHolder.viewPagerImages.getCurrentItem();
-                                Log.d(TAG, "현재 ViewPager 이미지 position: " + currentImagePosition);
-                                if (currentImagePosition < feed.getImageList().size()) {
-                                    imageCount = feed.getImageList().get(currentImagePosition).getImageCount();
-                                }
-                            }
-                            // TagListDialog를 띄움
-                            TagListDialog dialog = new TagListDialog(holder.itemView.getContext(), feedCount, imageCount);
-                            dialog.show();
-                        }
+
                         @Override
                         public void onEditPost() {
                             // EditText 생성 및 초기화
@@ -500,6 +485,23 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             }
                             // TagEditDialog를 띄움
                             TagEditDialog dialog = new TagEditDialog(holder.itemView.getContext(), feedCount, imageCount);
+                            dialog.show();
+                        }
+
+                        @Override
+                        public void onShowTags() {
+                            int feedCount = feed.getFeedCount(); // 해당 피드의 feed_count
+                            int imageCount = -1; // 초기값 설정
+                            if (feed.getImageList() != null) {
+                                // ViewPager2의 현재 페이지 위치에서 이미지 카운트 가져오기2
+                                int currentImagePosition = feedViewHolder.viewPagerImages.getCurrentItem();
+                                Log.d(TAG, "현재 ViewPager 이미지 position: " + currentImagePosition);
+                                if (currentImagePosition < feed.getImageList().size()) {
+                                    imageCount = feed.getImageList().get(currentImagePosition).getImageCount();
+                                }
+                            }
+                            // TagListDialog를 띄움
+                            TagListDialog dialog = new TagListDialog(holder.itemView.getContext(), feedCount, imageCount);
                             dialog.show();
                         }
                     });

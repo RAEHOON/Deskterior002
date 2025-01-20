@@ -12,7 +12,7 @@ public class MiniMenuDialog extends Dialog {
 
     // 미니메뉴다이어로그 상속
 
-    private Button btnShowTags;
+
     private Button btnEditPost;
     private Button btnDeletePost;
 
@@ -23,7 +23,7 @@ public class MiniMenuDialog extends Dialog {
         Log.d("MiniMenuDialog", "내부클래스 생성");
 
         // 버튼 연결
-        btnShowTags = findViewById(R.id.btn_show_tags);
+
         btnEditPost = findViewById(R.id.btn_edit_post);
         btnDeletePost = findViewById(R.id.btn_delete_post);
 
@@ -38,11 +38,6 @@ public class MiniMenuDialog extends Dialog {
             Log.d("MiniMenuDialog", "본인의 글이 아닙니다. 수정 및 삭제 버튼 숨김");
         }
 
-        // 버튼 클릭 이벤트 설정
-        btnShowTags.setOnClickListener(v -> {
-            listener.onShowTags();
-            dismiss();
-        });
 
         btnEditPost.setOnClickListener(v -> {
             listener.onEditPost();
@@ -57,7 +52,7 @@ public class MiniMenuDialog extends Dialog {
 
     // MiniMenuDialog 버튼 클릭 이벤트 리스너
     public interface OnMiniMenuActionListener {
-        void onShowTags();
+
         void onEditPost();
         void onDeletePost();
     }
