@@ -136,6 +136,17 @@ public interface ApiService {
             @Field("tag_name") String tagName
     );
 
+    @POST("edit_tag.php")
+    @FormUrlEncoded
+    Call<ServerResponse> editTag(
+            @Field("image_count") int imageCount,
+            @Field("category") String category,
+            @Field("name") String name,
+            @Field("url") String url,
+            @Field("x") int x,
+            @Field("y") int y
+    );
+
 
 
 
