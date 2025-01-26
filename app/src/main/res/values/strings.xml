@@ -22,4 +22,6 @@
     <string name="getmember">회원가입</string>
     <string name="deskterior">DESKTERIOR</string>
     <string name="mouseandpad"><![CDATA[MOUSE & PAD]]></string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.example.desk0018.Server;
 
 
+import com.example.desk0018.Comment.Comment;
 import com.example.desk0018.Tag.TagData;
 import com.example.desk0018.Users.Feed;
 import com.example.desk0018.Users.User;
@@ -145,6 +146,18 @@ public interface ApiService {
             @Field("url") String url,
             @Field("x") int x,
             @Field("y") int y
+    );
+
+    @GET("get_comments.php")
+    Call<CommentResponse> getComments(@Query("feed_count") int feedCount);
+
+
+    @FormUrlEncoded
+    @POST("add_comment.php")
+    Call<ServerResponse> addComment(
+            @Field("feed_count") int feedCount,
+            @Field("user_id") String userId,
+            @Field("comment") String comment
     );
 
 

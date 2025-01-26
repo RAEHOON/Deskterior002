@@ -98,7 +98,8 @@
             android:layout_width="22dp"
             android:layout_height="22dp"
             app:srcCompat="@drawable/heart"
-            android:layout_marginLeft="5dp" />
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="2dp"/>
 
         <TextView
             android:id="@+id/tv_likecount"
@@ -113,7 +114,8 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             app:srcCompat="@drawable/thatgel"
-            android:layout_marginLeft="10dp" />
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="2dp"/>
 
         <TextView
             android:id="@+id/tv_thatgelcount"
@@ -134,7 +136,8 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginRight="10dp"
-            app:srcCompat="@drawable/plusssscircle" />
+            app:srcCompat="@drawable/plusssscircle"
+            android:layout_marginTop="2dp"/>
 
         <ImageView
             android:id="@+id/btn_kinchat"

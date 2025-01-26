@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -20,12 +21,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.desk0018.Comment.CommentFragment;
 import com.example.desk0018.Dialog.TagEditDialog;
 import com.example.desk0018.R;
 import com.example.desk0018.Server.ApiService;
@@ -146,6 +149,13 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 feedViewHolder.bind(feed, clientTagLists); // 피드 데이터를 뷰에 연결
                 Log.d(TAG, "onBindViewHolder: feedViewHolder에 데이터 바인딩 완료");
                 // 버튼 클릭 이벤트 추가
+
+                // btn_thatgel 객체화 및 클릭 이벤트 추가
+                feedViewHolder.btnThatgel.setOnClickListener(v -> {
+                    openCommentFragment(feed.getFeedCount());
+                });
+
+
                 // 로그인된 사용자의 닉네임 가져오기
                 SharedPreferences sharedPreferences = context.getSharedPreferences("로그인정보", Context.MODE_PRIVATE);
                 String loggedInNickname = sharedPreferences.getString("nickname", null); // 로그인된 사용자 닉네임
@@ -513,6 +523,21 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
         }
     }
+
+    private void openCommentFragment(int feedCount) {
+        AppCompatActivity activity = (AppCompatActivity) context;
+        CommentFragment commentFragment = new CommentFragment();
+
+        // 피드 ID 전달을 위한 번들 생성
+        Bundle args = new Bundle();
+        args.putInt("feed_count", feedCount);
+        commentFragment.setArguments(args);
+
+        activity.getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, commentFragment)
+                .addToBackStack(null)
+                .commit();
+    }
     private void updateTagsFromServer(int feedCount, int imgCount, FeedViewHolder holder) {
         ApiService apiService = RetrofitClient.getApi();
         Call<List<TagData>> call = apiService.getTags(feedCount, imgCount); // 서버에서 태그 불러오기 API
@@ -560,7 +585,7 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         //내부 클래스 피드뷰홀더
         private List<View> tagViews;
         ImageView imgProfile;
-        TextView tvNickname, tvFeed, tvLikeCount, tvCommentCount;
+        TextView tvNickname, tvFeed, tvLikeCount, tvCommentEa;
         ViewPager2 viewPagerImages;
         CircleIndicator3 indicator;
         ImageView btnLike;
@@ -568,6 +593,7 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ImageView btnFollow;
         ImageView addTagButton;
         ImageView buttonMinimenu;
+        ImageView btnThatgel;
         FrameLayout tagContainer;
         public FeedViewHolder(@NonNull View itemView) {
 
@@ -588,9 +614,9 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             tvLikeCount = itemView.findViewById(R.id.tv_likecount);
             //좋아요수 텍뷰연결
             Log.d(TAG, "FeedViewHolder : tvLikeCount 연결" + (tvLikeCount != null));
-            tvCommentCount = itemView.findViewById(R.id.tv_thatgelcount);
+            tvCommentEa = itemView.findViewById(R.id.tv_thatgelcount);
             //댓글수 텍뷰연결
-            Log.d(TAG, "FeedViewHolder : tvthatgelcount 연결" + (tvCommentCount != null));
+            Log.d(TAG, "FeedViewHolder : tvthatgelcount 연결" + (tvCommentEa != null));
             viewPagerImages = itemView.findViewById(R.id.viewpager_images);
             //뷰페이저2 레이아웃 연결
             Log.d(TAG, "FeedViewHolder : viewPager_images 연결");
@@ -607,6 +633,8 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             //프레임레이아웃 연결
             Log.d(TAG, "FeedViewHolder: tag_container 연결");
             buttonMinimenu = itemView.findViewById(R.id.button_minimenu);
+
+            btnThatgel = itemView.findViewById(R.id.btn_thatgel);
             tagViews = new ArrayList<>();
         }
 
@@ -636,8 +664,8 @@ public class CombinedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             Log.d(TAG, "bind: 즐겨찾기 상태 설정 완료: " + feed.isFavorited());
 
             // 댓글 수 설정
-            tvCommentCount.setText(String.valueOf(feed.getCommentCount()));
-            Log.d(TAG, "bind: 댓글 수 설정 완료: " + feed.getCommentCount());
+            tvCommentEa.setText(String.valueOf(feed.getCommentEa()));
+            Log.d(TAG, "bind: 댓글 수 설정 완료: " + feed.getCommentEa());
             // 프로필 이미지 설정
             String profileImageUrl = "http://43.203.234.99/" + feed.getProfileImage();
             Log.d(TAG, "bind: 프로필 이미지 URL: " + profileImageUrl);

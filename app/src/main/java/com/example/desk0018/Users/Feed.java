@@ -1,24 +1,27 @@
 package com.example.desk0018.Users;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.example.desk0018.Tag.ImageData;
 
 
 import java.util.List;
 
-public class Feed {
-    private String nickname; // 닉네임
-    private List<ImageData> imageList; // 이미지 URL 및 태그 리스트
-    private int likeCount; // 좋아요 수
-    private String caption; // 피드 내용
-    private int commentCount; // 댓글 수
-    private String profileImage; // 프로필 이미지 URL
-    private int feedCount; // 피드 고유 ID
-    private boolean isLiked; // 좋아요 상태 추가
-    private boolean isFavorited; // 즐겨찾기 상태 추가
-
+public class Feed implements Parcelable {
+    private String nickname;
+    private List<ImageData> imageList;
+    private int likeCount;
+    private String caption;
+    private int commentCount;
+    private String profileImage;
+    private int feedCount;
+    private int commentEa;
+    private boolean isLiked;
+    private boolean isFavorited;
 
     // 생성자
-    public Feed(String nickname, List<ImageData> imageList, String caption, int likeCount, int commentCount, String profileImage, int feedCount, boolean isLiked, boolean isFavorited) {
+    public Feed(String nickname, List<ImageData> imageList, String caption, int likeCount, int commentCount, int commentEa, String profileImage, int feedCount, boolean isLiked, boolean isFavorited) {
         this.nickname = nickname;
         this.imageList = imageList;
         this.caption = caption;
@@ -28,6 +31,52 @@ public class Feed {
         this.feedCount = feedCount;
         this.isLiked = isLiked;
         this.isFavorited = isFavorited;
+        this.commentEa = commentEa;
+    }
+
+    // Parcelable을 위한 생성자 (Parcel에서 읽어오기)
+    protected Feed(Parcel in) {
+        nickname = in.readString();
+        imageList = in.createTypedArrayList(ImageData.CREATOR);  // ImageData도 Parcelable 구현 필요
+        likeCount = in.readInt();
+        caption = in.readString();
+        commentCount = in.readInt();
+        commentEa = in.readInt();
+        profileImage = in.readString();
+        feedCount = in.readInt();
+        isLiked = in.readByte() != 0;  // boolean을 byte로 저장
+        isFavorited = in.readByte() != 0;
+    }
+
+    public static final Creator<Feed> CREATOR = new Creator<Feed>() {
+        @Override
+        public Feed createFromParcel(Parcel in) {
+            return new Feed(in);
+        }
+
+        @Override
+        public Feed[] newArray(int size) {
+            return new Feed[size];
+        }
+    };
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(nickname);
+        dest.writeTypedList(imageList);
+        dest.writeInt(likeCount);
+        dest.writeString(caption);
+        dest.writeInt(commentCount);
+        dest.writeInt(commentEa);
+        dest.writeString(profileImage);
+        dest.writeInt(feedCount);
+        dest.writeByte((byte) (isLiked ? 1 : 0));
+        dest.writeByte((byte) (isFavorited ? 1 : 0));
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     // Getter 메서드
@@ -40,7 +89,7 @@ public class Feed {
     }
 
     public String getCaption() {
-        return caption; // feed 대신 caption 반환
+        return caption;
     }
 
     public int getLikeCount() {
@@ -49,6 +98,9 @@ public class Feed {
 
     public int getCommentCount() {
         return commentCount;
+    }
+    public int getCommentEa() {
+        return commentEa;
     }
 
     public String getProfileImage() {
@@ -60,30 +112,31 @@ public class Feed {
     }
 
     public boolean isLiked() {
-        return isLiked; // 현재 좋아요 상태 반환
-
-
+        return isLiked;
     }
+
     public boolean isFavorited() {
-        return isFavorited; // 현재 즐겨찾기 상태 반환
+        return isFavorited;
     }
 
     // Setter 메서드
     public void setCaption(String caption) {
-        this.caption = caption; // feed 대신 caption 수정
+        this.caption = caption;
     }
 
     public void setLikeCount(int likeCount) {
-        this.likeCount = likeCount; // 좋아요 수 수정
+        this.likeCount = likeCount;
     }
 
     public void setLiked(boolean liked) {
-        isLiked = liked; // 좋아요 상태 수정
+        isLiked = liked;
     }
 
     public void setFavorited(boolean favorited) {
-        isFavorited = favorited; // 즐겨찾기 상태 수정
+        isFavorited = favorited;
     }
 
-
+    public void setCommentEa(int commentEa) {
+        this.commentEa = commentEa;
+    }
 }
